@@ -262,8 +262,14 @@ function latlngToSVG(lat, lng) {
   return { x: pt.x, y: pt.y };
 }
 
-function bandWidth(count) {
-  return Math.max(6, Math.round((count / maxCount) * 30)) * 0.55;
+function bandWidth(flowCount, fromLoc, toLoc) {
+  // 出発地と目的地の来訪者数の平均を基準に正規化
+  // → 500人いる拠点間で50人しか移動しなければ細くなる
+  const fromPres = (presence[fromLoc] || {count:0}).count;
+  const toPres   = (presence[toLoc]   || {count:0}).count;
+  const basePres = Math.max(fromPres, toPres, 1);
+  const ratio    = flowCount / basePres; // 0〜1（拠点来訪者に対する移動割合）
+  return Math.max(2, Math.round(ratio * 40)) * 0.7;
 }
 
 // ===== 描画 =====
@@ -328,7 +334,7 @@ function renderFlows() {
     path.setAttribute('x1', fp.x); path.setAttribute('y1', fp.y);
     path.setAttribute('x2', tp.x); path.setAttribute('y2', tp.y);
     path.setAttribute('stroke', `url(#${gradId})`);
-    path.setAttribute('stroke-width', bandWidth(flow.count));
+    path.setAttribute('stroke-width', bandWidth(flow.count, flow.from, flow.to));
     path.setAttribute('stroke-linecap', 'butt');
     path.setAttribute('stroke-dasharray', '8 5');
     path.setAttribute('opacity', '0.85');
