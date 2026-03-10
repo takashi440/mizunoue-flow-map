@@ -506,8 +506,8 @@ function initMap() {
 }
 
 // ===== ツールチップ用の透明Leafletオーバーレイ =====
-function initTooltipLayers() {
 const tooltipLayers = [];
+function initTooltipLayers() {
 flows.forEach((flow) => {
   const fromLoc = locations[flow.from];
   const toLoc   = locations[flow.to];
@@ -572,8 +572,6 @@ Object.entries(locations).forEach(([name, pos]) => {
 }
 
 // ===== サイドバー =====
-function initSidebar() {
-const flowList = document.getElementById('flowList');
 const sideItems = [];
 
 function updateSidebarColors(mode) {
