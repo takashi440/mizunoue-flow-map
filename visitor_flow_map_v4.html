@@ -84,6 +84,13 @@
   </div>
   <div class="date">2026-03-09</div>
 </header>
+<div id="loading" style="
+  display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:rgba(10,14,26,0.95); border:1px solid rgba(255,100,100,0.4);
+  padding:16px 28px; border-radius:8px; color:#ff6464;
+  font-family:'Space Mono',monospace; font-size:13px; z-index:9999;
+  letter-spacing:0.1em;
+">読込中...</div>
 
 <div class="main">
   <div id="map-wrap" style="position:relative;flex:1;overflow:hidden;">
@@ -106,31 +113,61 @@
 </div>
 
 <script>
-// ===== データ =====
-const locations = {
-  'A棟':          { lat:34.761916821, lng:137.389253096 },
-  'B棟':          { lat:34.761963082, lng:137.387627605 },
-  'C棟':          { lat:34.761889056, lng:137.386880375 },
-  'D棟':          { lat:34.761728052, lng:137.385885276 },
-  'ひとなる図書館': { lat:34.761765562, lng:137.384355298 },
-};
+// ===== GAS APIエンドポイント =====
+const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbx044_Lz32U4iWo3dvQ1-7wp-OY8SQqf_DjgIhw_XtjRcof2JLW83JdRz1c9Xw6YZ81/exec_GAS_API_URL_HERE'; // ← GASのWebアプリURLに変更
 
-const flows = [
-  { from:'C棟', to:'D棟', count:974, distance:93 },
-  { from:'D棟', to:'C棟', count:582, distance:93 },
-  { from:'C棟', to:'B棟', count:431, distance:69 },
-  { from:'B棟', to:'C棟', count:255, distance:69 },
-  { from:'C棟', to:'A棟', count:187, distance:217 },
-  { from:'B棟', to:'D棟', count:153, distance:149 },
-  { from:'A棟', to:'C棟', count:128, distance:217 },
-  { from:'B棟', to:'A棟', count:109, distance:149 },
-  { from:'ひとなる図書館', to:'C棟', count:52, distance:231 },
-  { from:'D棟', to:'ひとなる図書館', count:38, distance:308 },
-  { from:'C棟', to:'ひとなる図書館', count:30, distance:231 },
-];
+// データ変数（API取得後に設定）
+let locations = {};
+let flows = [];
+let maxCount = 1;
+let minCount = 0;
 
-const maxCount = Math.max(...flows.map(f => f.count));
-const minCount = Math.min(...flows.map(f => f.count));
+// ローディング表示
+function showLoading(msg) {
+  document.getElementById('loading').textContent = msg;
+  document.getElementById('loading').style.display = 'block';
+}
+function hideLoading() {
+  document.getElementById('loading').style.display = 'none';
+}
+
+// APIからデータ取得
+async function fetchData(date) {
+  showLoading('データ取得中...');
+  try {
+    const url = date ? `${GAS_API_URL}?date=${date}` : GAS_API_URL;
+    const res  = await fetch(url);
+    const json = await res.json();
+
+    if (json.error) throw new Error(json.error);
+
+    // locations を辞書形式に変換
+    locations = {};
+    json.locations.forEach(loc => {
+      locations[loc.loc_id] = { lat: parseFloat(loc.lat), lng: parseFloat(loc.lng) };
+    });
+
+    // flows を配列に変換
+    flows = json.flows.map(f => ({
+      from:     f.from_loc,
+      to:       f.to_loc,
+      count:    parseInt(f.count),
+      distance: parseFloat(f.distance),
+    }));
+
+    maxCount = Math.max(...flows.map(f => f.count), 1);
+    minCount = Math.min(...flows.map(f => f.count), 0);
+
+    // 日付表示を更新
+    document.querySelector('header .date').textContent = json.date;
+
+    hideLoading();
+    return true;
+  } catch (err) {
+    showLoading('❌ データ取得失敗: ' + err.message);
+    return false;
+  }
+}
 
 // 赤系ヒートマップ（min/maxを動的に受け取る）
 function heatColor(count, alpha=1, mn=minCount, mx=maxCount) {
@@ -144,7 +181,7 @@ function heatColor(count, alpha=1, mn=minCount, mx=maxCount) {
 function isStaying(d) { return d >= 150; }
 
 // 往復ペア検出
-const pairMap = {};
+let pairMap = {};
 flows.forEach(f => {
   const key = [f.from, f.to].sort().join('|');
   if (!pairMap[key]) pairMap[key] = [];
@@ -167,6 +204,26 @@ const map = L.map('map', { center:[34.7617,137.3870], zoom:17 });
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution:'© OpenStreetMap contributors'
 }).addTo(map);
+
+// 日付入力UIを追加
+const dateControl = L.control({ position: 'topright' });
+dateControl.onAdd = function() {
+  const div = L.DomUtil.create('div');
+  div.innerHTML = `
+    <div style="background:rgba(10,14,26,0.95);border:1px solid rgba(255,100,100,0.3);
+      border-radius:6px;padding:8px 12px;display:flex;gap:8px;align-items:center;">
+      <input type="date" id="datePicker" value=""
+        style="background:#111;border:1px solid rgba(255,100,100,0.3);color:#e0e6f0;
+          border-radius:4px;padding:4px 8px;font-size:12px;cursor:pointer;">
+      <button id="reloadBtn"
+        style="background:#ff6464;border:none;color:#fff;border-radius:4px;
+          padding:4px 10px;font-size:12px;cursor:pointer;font-weight:700;">更新</button>
+    </div>
+  `;
+  L.DomEvent.disableClickPropagation(div);
+  return div;
+};
+dateControl.addTo(map);
 
 // ===== SVGオーバーレイ =====
 const svg = document.getElementById('flow-svg');
@@ -402,12 +459,54 @@ function resizeSVG() {
 window.addEventListener('resize', () => { resizeSVG(); renderFlows(); });
 resizeSVG();
 
-// 初回描画
-map.whenReady(() => {
-  setTimeout(() => { renderFlows(); }, 100);
+// 初回描画（API取得後）
+map.whenReady(async () => {
+  // 今日の日付をデフォルト設定
+  const today = new Date();
+  const jst   = new Date(today.getTime() + 9*60*60*1000);
+  const dateStr = jst.toISOString().slice(0,10);
+  document.getElementById('datePicker').value = dateStr;
+
+  await fetchData(dateStr);
+  initMap();
+
+  // 更新ボタン
+  document.getElementById('reloadBtn').addEventListener('click', async () => {
+    const d = document.getElementById('datePicker').value;
+    clearMap();
+    await fetchData(d);
+    initMap();
+  });
 });
 
+function clearMap() {
+  bandGroup.innerHTML = '';
+  arrowGroup.innerHTML = '';
+  defs.innerHTML = '';
+  flowElements.length = 0;
+  tooltipLayers.forEach(tl => map.removeLayer(tl.layer));
+  tooltipLayers.length = 0;
+  document.getElementById('flowList').innerHTML = '';
+  sideItems.length = 0;
+}
+
+function initMap() {
+  resizeSVG();
+  pairMap = {};
+  flows.forEach(f => {
+    const key = [f.from, f.to].sort().join('|');
+    if (!pairMap[key]) pairMap[key] = [];
+    pairMap[key].push(f);
+  });
+  renderFlows();
+  initTooltipLayers();
+  initMarkers();
+  initSidebar();
+  updateSidebarColors(currentMode);
+}
+
 // ===== ツールチップ用の透明Leafletオーバーレイ =====
+function initTooltipLayers() {
 const tooltipLayers = [];
 flows.forEach((flow) => {
   const fromLoc = locations[flow.from];
@@ -439,7 +538,10 @@ flows.forEach((flow) => {
   tooltipLayers.push({ layer:tl, staying });
 });
 
+}
+
 // ===== 拠点マーカー =====
+function initMarkers() {
 const locationStats = {};
 flows.forEach(f => {
   if (!locationStats[f.from]) locationStats[f.from] = { out:0, in:0 };
@@ -467,7 +569,10 @@ Object.entries(locations).forEach(([name, pos]) => {
   `);
 });
 
+}
+
 // ===== サイドバー =====
+function initSidebar() {
 const flowList = document.getElementById('flowList');
 const sideItems = [];
 
@@ -520,6 +625,8 @@ flows.forEach((flow, i) => {
   flowList.appendChild(item);
   sideItems.push(item);
 });
+
+}
 
 // ===== トグルボタン =====
 document.querySelectorAll('.toggle-btn').forEach(btn => {
