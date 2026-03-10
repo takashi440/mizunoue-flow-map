@@ -111,9 +111,12 @@
       <div style="margin-top:10px;" class="legend-label">拠点マーカー</div>
       <div style="font-size:10px;color:#6b7a99;line-height:1.8;">
         サイズ＝来訪者数<br>
-        <span style="color:#ffd700;">●</span> 滞在5分以上<br>
-        <span style="color:#ff9900;">●</span> 滞在2〜5分<br>
-        <span style="color:#ff6464;">●</span> 滞在2分未満
+        枠色＝来訪者数の多少<br>
+        <span style="display:inline-flex;gap:4px;align-items:center;">
+          <span style="color:#555566;">●</span>少
+          <span style="color:#6699cc;">→</span>
+          <span style="color:#aaddff;">●</span>多
+        </span>
       </div>
     </div>
   </div>
@@ -485,11 +488,14 @@ function initMap() {
       ? Math.round(28 + (pres.count / presenceMax) * 24)
       : (isHito ? 28 : 32);
 
-    // 色：滞在時間に応じて変化（短=白枠、長=金枠）
-    const dwell = pres.avg_dwell;
-    const borderColor = dwell >= 5 ? '#ffd700'   // 金：5分以上
-                      : dwell >= 2 ? '#ff9900'   // オレンジ：2〜5分
-                      : '#ff6464';               // 赤：2分未満
+    // 色：来訪者数に応じてグレー→濃青（0=グレー、多=濃青）
+    const presRatio = presenceMax > 0 ? pres.count / presenceMax : 0;
+    const br = Math.round(100 - presRatio * 100);  // 100→0
+    const bg = Math.round(100 - presRatio * 60);   // 100→40
+    const bb = Math.round(120 + presRatio * 135);  // 120→255
+    const borderColor = pres.count === 0
+      ? '#555566'
+      : `rgb(${br},${bg},${bb})`;
 
     const fontSize = isHito ? Math.max(7, baseSize * 0.28) : Math.max(10, baseSize * 0.34);
 
