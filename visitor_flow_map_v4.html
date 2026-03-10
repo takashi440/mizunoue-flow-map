@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>来訪者動線マップ｜水上ビル商店街</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Space+Mono:wght@400;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0e1a; color:#e0e6f0; font-family:'Noto Sans JP',sans-serif; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+
+  header {
+    padding:10px 20px;
+    background:rgba(10,14,26,0.97);
+    border-bottom:1px solid rgba(255,100,100,0.25);
+    display:flex; align-items:center; justify-content:space-between;
+    z-index:1000; flex-shrink:0; gap:16px;
+  }
+  header h1 { font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#ff6464; white-space:nowrap; }
+
+  .toggle-group { display:flex; gap:6px; background:rgba(255,255,255,0.04); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.08); }
+  .toggle-btn { padding:5px 14px; border-radius:5px; border:none; background:transparent; color:#6b7a99; font-family:'Noto Sans JP',sans-serif; font-size:12px; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+  .toggle-btn.active { background:#ff6464; color:#fff; font-weight:700; }
+  .toggle-btn:hover:not(.active) { color:#e0e6f0; background:rgba(255,255,255,0.08); }
+
+  header .date { font-size:11px; color:#6b7a99; font-family:'Space Mono',monospace; white-space:nowrap; }
+
+  .main { display:flex; flex:1; overflow:hidden; }
+  #map-wrap { flex:1; }
+  #map { width:100%; height:100%; background:#0a0e1a; }
+
+
+
+  .sidebar {
+    width:255px; background:rgba(10,14,26,0.97);
+    border-left:1px solid rgba(255,100,100,0.15);
+    display:flex; flex-direction:column; overflow:hidden; flex-shrink:0;
+  }
+  .sidebar-title { padding:12px 16px; font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.2em; color:#ff6464; text-transform:uppercase; border-bottom:1px solid rgba(255,100,100,0.1); }
+  .flow-list { overflow-y:auto; flex:1; padding:6px 0; }
+  .flow-item { padding:9px 14px; border-bottom:1px solid rgba(255,255,255,0.04); cursor:pointer; transition:background 0.15s; display:flex; align-items:center; gap:10px; }
+  .flow-item:hover { background:rgba(255,100,100,0.06); }
+  .flow-item.active { background:rgba(255,100,100,0.12); }
+  .flow-item.hidden { display:none; }
+  .flow-swatch { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+  .flow-bar-wrap { flex:1; min-width:0; }
+  .flow-route { font-size:11px; font-weight:700; color:#c8d4e8; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .flow-meta { font-size:10px; color:#4a5568; margin-bottom:3px; }
+  .flow-bar-bg { height:3px; background:rgba(255,255,255,0.07); border-radius:2px; overflow:hidden; }
+  .flow-bar { height:100%; border-radius:2px; }
+  .flow-count { font-family:'Space Mono',monospace; font-size:12px; font-weight:700; min-width:38px; text-align:right; }
+
+  .legend { padding:12px 16px; border-top:1px solid rgba(255,100,100,0.1); font-size:10px; color:#6b7a99; }
+  .legend-label { font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:#4a5568; margin-bottom:6px; }
+  .heatmap-bar { height:8px; border-radius:4px; background:linear-gradient(to right, #ffcccc, #ff6464, #990000); margin-bottom:4px; }
+  .heatmap-labels { display:flex; justify-content:space-between; font-size:9px; color:#4a5568; margin-bottom:10px; }
+  .legend-item { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+  .legend-band-solid { height:6px; width:28px; border-radius:3px; background:#ff6464; }
+  .legend-band-dashed { height:6px; width:28px; border-radius:3px; background:repeating-linear-gradient(90deg,#888 0,#888 5px,transparent 5px,transparent 9px); }
+
+  .leaflet-tile { filter:brightness(0.9) saturate(0.3) hue-rotate(180deg) invert(1) brightness(0.45); }
+
+  .custom-marker { display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid #ff6464; background:#000; color:#fff; font-family:'Space Mono',monospace; font-weight:700; cursor:pointer; box-shadow:0 0 14px rgba(255,100,100,0.5); position:relative; z-index:9999; }
+
+  .leaflet-popup-content-wrapper { background:rgba(10,14,26,0.96); border:1px solid rgba(255,100,100,0.35); border-radius:6px; color:#e0e6f0; font-family:'Noto Sans JP',sans-serif; box-shadow:0 4px 24px rgba(0,0,0,0.5); }
+  .leaflet-popup-tip { background:rgba(10,14,26,0.96); }
+  .popup-title { font-weight:700; font-size:13px; color:#ff6464; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(255,100,100,0.2); }
+  .popup-row { font-size:12px; color:#718096; margin-bottom:4px; display:flex; justify-content:space-between; gap:12px; }
+  .popup-row span { color:#e0e6f0; font-weight:700; }
+
+  .leaflet-tooltip { background:rgba(10,14,26,0.96); border:1px solid rgba(255,100,100,0.35); color:#e0e6f0; font-family:'Noto Sans JP',sans-serif; border-radius:6px; }
+  .leaflet-tooltip-left:before, .leaflet-tooltip-right:before { border-right-color:rgba(255,100,100,0.35); }
+</style>
+</head>
+<body>
+<header>
+  <h1>🗺 Visitor Flow — 水上ビル商店街</h1>
+  <div class="toggle-group">
+    <button class="toggle-btn active" data-mode="all">すべて</button>
+    <button class="toggle-btn" data-mode="passing">素通り <small style="opacity:0.6">＜150m</small></button>
+    <button class="toggle-btn" data-mode="staying">立ち寄り <small style="opacity:0.6">≥150m</small></button>
+  </div>
+  <div class="date">2026-03-09</div>
+</header>
+
+<div class="main">
+  <div id="map-wrap" style="position:relative;flex:1;overflow:hidden;">
+    <div id="map" style="width:100%;height:100%;"></div>
+    <svg id="flow-svg" style="position:absolute;top:0;left:0;pointer-events:none;z-index:650;"></svg>
+  </div>
+  <div class="sidebar">
+    <div class="sidebar-title">動線ランキング</div>
+    <div class="flow-list" id="flowList"></div>
+    <div class="legend">
+      <div class="legend-label">来訪者数</div>
+      <div class="heatmap-bar"></div>
+      <div class="heatmap-labels"><span>少</span><span>多</span></div>
+      <div class="legend-label">帯の幅・種別</div>
+      <div class="legend-item"><div class="legend-band-solid"></div><span>立ち寄り（≥150m）太め</span></div>
+      <div class="legend-item"><div class="legend-band-dashed"></div><span>素通り（＜150m）細め</span></div>
+      <div style="color:#4a5568;font-size:10px;margin-top:6px;">帯の濃淡＝来訪者数<br>矢印で方向を示す</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== データ =====
+const locations = {
+  'A棟':          { lat:34.761916821, lng:137.389253096 },
+  'B棟':          { lat:34.761963082, lng:137.387627605 },
+  'C棟':          { lat:34.761889056, lng:137.386880375 },
+  'D棟':          { lat:34.761728052, lng:137.385885276 },
+  'ひとなる図書館': { lat:34.761765562, lng:137.384355298 },
+};
+
+const flows = [
+  { from:'C棟', to:'D棟', count:974, distance:93 },
+  { from:'D棟', to:'C棟', count:582, distance:93 },
+  { from:'C棟', to:'B棟', count:431, distance:69 },
+  { from:'B棟', to:'C棟', count:255, distance:69 },
+  { from:'C棟', to:'A棟', count:187, distance:217 },
+  { from:'B棟', to:'D棟', count:153, distance:149 },
+  { from:'A棟', to:'C棟', count:128, distance:217 },
+  { from:'B棟', to:'A棟', count:109, distance:149 },
+  { from:'ひとなる図書館', to:'C棟', count:52, distance:231 },
+  { from:'D棟', to:'ひとなる図書館', count:38, distance:308 },
+  { from:'C棟', to:'ひとなる図書館', count:30, distance:231 },
+];
+
+const maxCount = Math.max(...flows.map(f => f.count));
+const minCount = Math.min(...flows.map(f => f.count));
+
+// 赤系ヒートマップ（min/maxを動的に受け取る）
+function heatColor(count, alpha=1, mn=minCount, mx=maxCount) {
+  const t = mx === mn ? 1 : (count - mn) / (mx - mn);
+  const r = 255;
+  const g = Math.round(180 * (1-t));
+  const b = Math.round(180 * (1-t));
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function isStaying(d) { return d >= 150; }
+
+// 往復ペア検出
+const pairMap = {};
+flows.forEach(f => {
+  const key = [f.from, f.to].sort().join('|');
+  if (!pairMap[key]) pairMap[key] = [];
+  pairMap[key].push(f);
+});
+
+function getOffset(flow) {
+  const key  = [flow.from, flow.to].sort().join('|');
+  const pair = pairMap[key];
+  if (pair.length < 2) return 0.00005;
+  // fromのlngが大きい（東側から）= +オフセット（北側）、小さい（西側から）= -オフセット（南側）
+  const fromLoc = locations[flow.from];
+  const toLoc   = locations[flow.to];
+  const goingEast = toLoc.lng > fromLoc.lng;
+  return goingEast ? -0.00014 : 0.00014;
+}
+
+// ===== 地図 =====
+const map = L.map('map', { center:[34.7617,137.3870], zoom:17 });
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:'© OpenStreetMap contributors'
+}).addTo(map);
+
+// ===== SVGオーバーレイ =====
+const svg = document.getElementById('flow-svg');
+const svgNS = 'http://www.w3.org/2000/svg';
+
+// defsセクション（グラデーション定義）
+const defs = document.createElementNS(svgNS, 'defs');
+svg.appendChild(defs);
+
+// 帯グループ（マーカーより下に表示）
+const bandGroup = document.createElementNS(svgNS, 'g');
+bandGroup.setAttribute('id', 'bands');
+svg.appendChild(bandGroup);
+
+// 矢印グループ
+const arrowGroup = document.createElementNS(svgNS, 'g');
+arrowGroup.setAttribute('id', 'arrows');
+svg.appendChild(arrowGroup);
+
+// lat/lng → SVG上のpx座標
+function latlngToSVG(lat, lng) {
+  const pt = map.latLngToContainerPoint([lat, lng]);
+  return { x: pt.x, y: pt.y };
+}
+
+// 帯の幅
+function bandWidth(count) {
+  const staying_scale = 1;
+  return Math.max(6, Math.round((count / maxCount) * 30));
+}
+
+// 流れ描画状態管理
+let currentMode = 'all';
+const flowElements = []; // { gradEl, pathEl, arrowEls, staying }
+
+// ===== 描画関数 =====
+function renderFlows() {
+  // クリア
+  bandGroup.innerHTML = '';
+  arrowGroup.innerHTML = '';
+  defs.innerHTML = '';
+  flowElements.length = 0;
+
+  // 来訪者数少ない順（多いものが上に描画）
+  const sorted = [...flows].sort((a,b) => a.count - b.count);
+
+  // 表示中ルートのmin/maxで色を正規化
+  const visibleFlows = sorted.filter(f => {
+    const s = isStaying(f.distance);
+    return currentMode === 'all' || (currentMode === 'passing' && !s) || (currentMode === 'staying' && s);
+  });
+  const dynMax = Math.max(...visibleFlows.map(f => f.count));
+  const dynMin = Math.min(...visibleFlows.map(f => f.count));
+
+  sorted.forEach((flow, i) => {
+    const fromLoc = locations[flow.from];
+    const toLoc   = locations[flow.to];
+    if (!fromLoc || !toLoc) return;
+
+    const offset  = getOffset(flow);
+    const staying = isStaying(flow.distance);
+
+    // 表示フィルター
+    const visible =
+      currentMode === 'all' ||
+      (currentMode === 'passing' && !staying) ||
+      (currentMode === 'staying' && staying);
+
+    // オフセット計算（法線方向）
+    const dx = toLoc.lng - fromLoc.lng;
+    const dy = toLoc.lat - fromLoc.lat;
+    const len = Math.sqrt(dx*dx + dy*dy);
+    const nx = -dy / len;
+    const ny =  dx / len;
+
+    const fLat = fromLoc.lat + nx * offset;
+    const fLng = fromLoc.lng + ny * offset;
+    const tLat = toLoc.lat   + nx * offset;
+    const tLng = toLoc.lng   + ny * offset;
+
+    const _fp = latlngToSVG(fLat, fLng);
+    const _tp = latlngToSVG(tLat, tLng);
+
+    // マーカー半径分だけ内側にトリム（16px）
+    const _dx = _tp.x - _fp.x;
+    const _dy = _tp.y - _fp.y;
+    const _len = Math.sqrt(_dx*_dx + _dy*_dy);
+    const _trim = 16;
+    const fp = { x: _fp.x + _dx/_len * _trim, y: _fp.y + _dy/_len * _trim };
+    const tp = { x: _tp.x - _dx/_len * _trim, y: _tp.y - _dy/_len * _trim };
+
+    // ===== グラデーション定義 =====
+    const gradId = `grad_${i}`;
+    const grad = document.createElementNS(svgNS, 'linearGradient');
+    grad.setAttribute('id', gradId);
+    grad.setAttribute('gradientUnits', 'userSpaceOnUse');
+    grad.setAttribute('x1', fp.x); grad.setAttribute('y1', fp.y);
+    grad.setAttribute('x2', tp.x); grad.setAttribute('y2', tp.y);
+
+    // from側：透明 → to側：色
+    const c = heatColor(flow.count, 1);
+    const stops = [
+      { offset:'0%',   color: 'rgba(0,0,0,0)' },
+      { offset:'25%',  color: heatColor(flow.count, 0.3, dynMin, dynMax) },
+      { offset:'65%',  color: heatColor(flow.count, 0.9, dynMin, dynMax) },
+      { offset:'100%', color: heatColor(flow.count, 1.0, dynMin, dynMax) },
+    ];
+
+    stops.forEach(s => {
+      const stop = document.createElementNS(svgNS, 'stop');
+      stop.setAttribute('offset', s.offset);
+      stop.setAttribute('stop-color', s.color);
+      grad.appendChild(stop);
+    });
+    defs.appendChild(grad);
+
+    // ===== 帯パス =====
+    const path = document.createElementNS(svgNS, 'line');
+    path.setAttribute('x1', fp.x); path.setAttribute('y1', fp.y);
+    path.setAttribute('x2', tp.x); path.setAttribute('y2', tp.y);
+    path.setAttribute('stroke', `url(#${gradId})`);
+    path.setAttribute('stroke-width', bandWidth(flow.count) * 0.55);
+    path.setAttribute('stroke-linecap', 'butt');
+    path.setAttribute('stroke-dasharray', '8 5');
+    path.setAttribute('opacity', '0.85');
+    path.setAttribute('display', visible ? '' : 'none');
+    bandGroup.appendChild(path);
+
+    // ===== 矢印（中間2〜3か所）=====
+    const arrowCount = flow.distance >= 200 ? 3 : 2;
+    const arrowEls = [];
+    const angle = Math.atan2(tp.y - fp.y, tp.x - fp.x) * 180 / Math.PI;
+    const as = staying ? 7 : 5;  // 矢印サイズ
+
+    for (let ai = 0; ai < arrowCount; ai++) {
+      const t = (ai + 1) / (arrowCount + 1);
+      const mx = fp.x + (tp.x - fp.x) * t;
+      const my = fp.y + (tp.y - fp.y) * t;
+
+      const arrowColor = heatColor(flow.count, staying ? 1 : 0.7, dynMin, dynMax);
+
+      const g = document.createElementNS(svgNS, 'g');
+      g.setAttribute('transform', `translate(${mx},${my}) rotate(${angle})`);
+
+      const poly = document.createElementNS(svgNS, 'polygon');
+      poly.setAttribute('points', `0,${-as} ${as*0.6},${as*0.5} 0,${as*0.1} ${-as*0.6},${as*0.5}`);
+      poly.setAttribute('fill', 'none');
+      poly.setAttribute('stroke', arrowColor);
+      poly.setAttribute('stroke-width', staying ? '1.5' : '1');
+      poly.setAttribute('stroke-linejoin', 'round');
+      g.appendChild(poly);
+
+      g.setAttribute('display', visible ? '' : 'none');
+      arrowGroup.appendChild(g);
+      arrowEls.push(g);
+    }
+
+    flowElements.push({ gradEl: grad, pathEl: path, arrowEls, staying, gradId, fp, tp });
+  });
+}
+
+// ===== 地図移動時に再描画 =====
+function onMapMove() {
+  // グラデーションの座標を更新
+  const sorted = [...flows].sort((a,b) => a.count - b.count);
+
+  // 表示中ルートのmin/maxで色を正規化
+  const visibleFlows = sorted.filter(f => {
+    const s = isStaying(f.distance);
+    return currentMode === 'all' || (currentMode === 'passing' && !s) || (currentMode === 'staying' && s);
+  });
+  const dynMax = Math.max(...visibleFlows.map(f => f.count));
+  const dynMin = Math.min(...visibleFlows.map(f => f.count));
+
+  sorted.forEach((flow, i) => {
+    const el = flowElements[i];
+    if (!el) return;
+
+    const fromLoc = locations[flow.from];
+    const toLoc   = locations[flow.to];
+    if (!fromLoc || !toLoc) return;
+
+    const offset  = getOffset(flow);
+    const dx = toLoc.lng - fromLoc.lng;
+    const dy = toLoc.lat - fromLoc.lat;
+    const len = Math.sqrt(dx*dx + dy*dy);
+    const nx = -dy / len;
+    const ny =  dx / len;
+
+    const fLat = fromLoc.lat + nx * offset;
+    const fLng = fromLoc.lng + ny * offset;
+    const tLat = toLoc.lat   + nx * offset;
+    const tLng = toLoc.lng   + ny * offset;
+
+    const _fp2 = latlngToSVG(fLat, fLng);
+    const _tp2 = latlngToSVG(tLat, tLng);
+    const _dx2 = _tp2.x - _fp2.x;
+    const _dy2 = _tp2.y - _fp2.y;
+    const _len2 = Math.sqrt(_dx2*_dx2 + _dy2*_dy2);
+    const _trim2 = 16;
+    const fp = { x: _fp2.x + _dx2/_len2 * _trim2, y: _fp2.y + _dy2/_len2 * _trim2 };
+    const tp = { x: _tp2.x - _dx2/_len2 * _trim2, y: _tp2.y - _dy2/_len2 * _trim2 };
+
+    // グラデーション更新
+    el.gradEl.setAttribute('x1', fp.x); el.gradEl.setAttribute('y1', fp.y);
+    el.gradEl.setAttribute('x2', tp.x); el.gradEl.setAttribute('y2', tp.y);
+
+    // 帯更新
+    el.pathEl.setAttribute('x1', fp.x); el.pathEl.setAttribute('y1', fp.y);
+    el.pathEl.setAttribute('x2', tp.x); el.pathEl.setAttribute('y2', tp.y);
+
+    // 矢印更新
+    const arrowCount = el.arrowEls.length;
+    const angle2 = Math.atan2(tp.y - fp.y, tp.x - fp.x) * 180 / Math.PI;
+    el.arrowEls.forEach((g, ai) => {
+      const t = (ai + 1) / (arrowCount + 1);
+      const mx = fp.x + (tp.x - fp.x) * t;
+      const my = fp.y + (tp.y - fp.y) * t;
+      g.setAttribute('transform', `translate(${mx},${my}) rotate(${angle2})`);
+    });
+  });
+}
+
+map.on('move zoom viewreset', onMapMove);
+
+// SVGのサイズをマップに合わせる
+function resizeSVG() {
+  const wrap = document.getElementById('map-wrap');
+  svg.setAttribute('width', wrap.offsetWidth);
+  svg.setAttribute('height', wrap.offsetHeight);
+}
+
+window.addEventListener('resize', () => { resizeSVG(); renderFlows(); });
+resizeSVG();
+
+// 初回描画
+map.whenReady(() => {
+  setTimeout(() => { renderFlows(); }, 100);
+});
+
+// ===== ツールチップ用の透明Leafletオーバーレイ =====
+const tooltipLayers = [];
+flows.forEach((flow) => {
+  const fromLoc = locations[flow.from];
+  const toLoc   = locations[flow.to];
+  if (!fromLoc || !toLoc) return;
+
+  const offset  = getOffset(flow);
+  const staying = isStaying(flow.distance);
+  const dx = toLoc.lng - fromLoc.lng;
+  const dy = toLoc.lat - fromLoc.lat;
+  const len = Math.sqrt(dx*dx + dy*dy);
+  const nx = -dy / len;
+  const ny =  dx / len;
+
+  const pts = [
+    [fromLoc.lat + nx*offset, fromLoc.lng + ny*offset],
+    [toLoc.lat   + nx*offset, toLoc.lng   + ny*offset],
+  ];
+
+  const tl = L.polyline(pts, { color:'transparent', weight:16, opacity:0 }).addTo(map);
+  tl.bindTooltip(`
+    <div style="font-family:'Noto Sans JP',sans-serif;min-width:130px;">
+      <div style="color:#ff6464;font-weight:700;margin-bottom:5px;">${flow.from} → ${flow.to}</div>
+      <div style="color:#718096;font-size:12px;">来訪者数：<b style="color:#fff;">${flow.count.toLocaleString()}人</b></div>
+      <div style="color:#718096;font-size:12px;">距離：<b style="color:#fff;">${flow.distance}m</b></div>
+      <div style="color:#718096;font-size:12px;">種別：<b style="color:#fff;">${staying ? '立ち寄り' : '素通り'}</b></div>
+    </div>
+  `, { sticky:true });
+  tooltipLayers.push({ layer:tl, staying });
+});
+
+// ===== 拠点マーカー =====
+const locationStats = {};
+flows.forEach(f => {
+  if (!locationStats[f.from]) locationStats[f.from] = { out:0, in:0 };
+  if (!locationStats[f.to])   locationStats[f.to]   = { out:0, in:0 };
+  locationStats[f.from].out += f.count;
+  locationStats[f.to].in   += f.count;
+});
+
+Object.entries(locations).forEach(([name, pos]) => {
+  const isHito = name === 'ひとなる図書館';
+  const size   = isHito ? 28 : 32;
+  const label  = isHito ? 'ひと' : name.replace('棟','');
+  const stats  = locationStats[name] || { out:0, in:0 };
+
+  const icon = L.divIcon({
+    html:`<div class="custom-marker" style="width:${size}px;height:${size}px;font-size:${isHito?8:11}px;">${label}</div>`,
+    iconSize:[size,size], iconAnchor:[size/2,size/2], className:'',
+  });
+
+  L.marker([pos.lat, pos.lng], { icon, pane:'tooltipPane' }).addTo(map).bindPopup(`
+    <div class="popup-title">${name}</div>
+    <div class="popup-row">出発（→）<span>${stats.out.toLocaleString()}人</span></div>
+    <div class="popup-row">到着（←）<span>${stats.in.toLocaleString()}人</span></div>
+    <div class="popup-row">合計　　 <span>${(stats.out+stats.in).toLocaleString()}人</span></div>
+  `);
+});
+
+// ===== サイドバー =====
+const flowList = document.getElementById('flowList');
+const sideItems = [];
+
+function updateSidebarColors(mode) {
+  const vf = flows.filter(f => {
+    const s = isStaying(f.distance);
+    return mode === 'all' || (mode==='passing' && !s) || (mode==='staying' && s);
+  });
+  const mx = vf.length ? Math.max(...vf.map(f=>f.count)) : maxCount;
+  const mn = vf.length ? Math.min(...vf.map(f=>f.count)) : minCount;
+  sideItems.forEach((item, idx) => {
+    const f = flows[idx];
+    const s = isStaying(f.distance);
+    const visible = mode === 'all' || (mode==='passing' && !s) || (mode==='staying' && s);
+    const c = heatColor(f.count, 1, mn, mx);
+    item.querySelector('.flow-swatch').style.background = c;
+    item.querySelector('.flow-bar').style.background = c;
+    item.querySelector('.flow-count').style.color = c;
+    item.classList.toggle('hidden', !visible);
+  });
+}
+
+flows.forEach((flow, i) => {
+  const pct     = Math.round((flow.count - minCount) / (maxCount - minCount) * 100);
+  const staying = isStaying(flow.distance);
+  const color   = heatColor(flow.count, 1);
+
+  const item = document.createElement('div');
+  item.className = 'flow-item';
+  item.dataset.staying = staying ? '1' : '0';
+  item.innerHTML = `
+    <div class="flow-swatch" style="background:${color};opacity:${staying?1:0.5};"></div>
+    <div class="flow-bar-wrap">
+      <div class="flow-route">${flow.from} → ${flow.to}</div>
+      <div class="flow-meta">${flow.distance}m ｜ ${staying ? '立ち寄り' : '素通り'}</div>
+      <div class="flow-bar-bg">
+        <div class="flow-bar" style="width:${pct}%;background:${color};opacity:${staying?0.9:0.4};"></div>
+      </div>
+    </div>
+    <div class="flow-count" style="color:${color};opacity:${staying?1:0.65};">${flow.count}</div>
+  `;
+
+  item.addEventListener('click', () => {
+    sideItems.forEach(el => el.classList.remove('active'));
+    item.classList.add('active');
+    const tl = tooltipLayers[i];
+    if (tl) map.fitBounds(tl.layer.getBounds(), { padding:[100,100] });
+  });
+
+  flowList.appendChild(item);
+  sideItems.push(item);
+});
+
+// ===== トグルボタン =====
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+
+    // SVG帯・矢印の表示切替
+    const sorted = [...flows].sort((a,b) => a.count - b.count);
+    sorted.forEach((flow, i) => {
+      const el = flowElements[i];
+      if (!el) return;
+      const staying = isStaying(flow.distance);
+      const visible =
+        currentMode === 'all' ||
+        (currentMode === 'passing' && !staying) ||
+        (currentMode === 'staying' && staying);
+      el.pathEl.setAttribute('display', visible ? '' : 'none');
+      el.arrowEls.forEach(g => g.setAttribute('display', visible ? '' : 'none'));
+    });
+
+    // ツールチップ
+    tooltipLayers.forEach((tl) => {
+      const staying = tl.staying;
+      const visible =
+        currentMode === 'all' ||
+        (currentMode === 'passing' && !staying) ||
+        (currentMode === 'staying' && staying);
+      visible ? tl.layer.addTo(map) : map.removeLayer(tl.layer);
+    });
+
+    // SVG再描画（色を正しく更新）
+    renderFlows();
+
+    // サイドバー色＋表示切替
+    updateSidebarColors(currentMode);
+  });
+});
+</script>
+</body>
+</html>
