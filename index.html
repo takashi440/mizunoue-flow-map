@@ -58,7 +58,7 @@ z-index:1000; flex-shrink:0;
 /* MAP OVERLAY PANELS */
 .map-panel { position:absolute; z-index:650; background:var(–panel); border:1px solid var(–brd); border-radius:8px; padding:12px 15px; pointer-events:none; backdrop-filter:blur(4px); }
 
-#panel-ticker { top:14px; left:14px; min-width:185px; }
+#panel-ticker { top:14px; left:14px; min-width:185px; border-color:rgba(255,100,100,0.45); background:rgba(5,8,18,0.97); border-left:3px solid var(–red); }
 .ticker-head { font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(–mut); margin-bottom:9px; display:flex; align-items:center; gap:7px; }
 .live-dot { width:6px; height:6px; border-radius:50%; background:#44ff88; box-shadow:0 0 6px #44ff88; animation:blink 1.6s ease-in-out infinite; }
 @keyframes blink { 0%,100%{opacity:1}50%{opacity:.25} }
@@ -926,11 +926,11 @@ leafletMap.whenReady(async()=>{
   const jst=new Date(Date.now()+9*60*60*1000);
   const d=jst.toISOString().slice(0,10);
   $('datePicker').value=d;
-  fetchWeather(d);
+  await fetchWeather(d);
   await fetchData(d);
   initMap();
   $('reloadBtn').addEventListener('click',async()=>{
-    const rd=$('datePicker').value; fetchWeather(rd); await fetchData(rd); initMap();
+    const rd=$('datePicker').value; await fetchWeather(rd); await fetchData(rd); initMap();
   });
 });
 
