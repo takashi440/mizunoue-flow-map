@@ -443,6 +443,13 @@ function heatColor(count,alpha=1,mn=null,mx=null){
   const t=hi===lo?1:(count-lo)/(hi-lo);
   return `rgba(255,${Math.round(180*(1-t))},${Math.round(180*(1-t))},${alpha})`;
 }
+// ★ isStaying/isVisible は getFlowColor より先に定義
+const isStaying=d=>d>=150;
+const isVisible=f=>{
+  const st=isStaying(f.distance);
+  return currentMode==='all'||(currentMode==='passing'&&!st)||(currentMode==='staying'&&st);
+};
+
 // 粒と同じロジックで色を返す（サイドバー用）
 function getFlowColor(flow){
   const r=maxCount>minCount?(flow.count-minCount)/(maxCount-minCount):1;
@@ -470,12 +477,6 @@ function getFlowColor(flow){
   cb=Math.round(cb+(gray-cb)*humidFactor);
   return `rgb(${cr},${cg},${cb})`;
 }
-
-const isStaying=d=>d>=150;
-const isVisible=f=>{
-  const st=isStaying(f.distance);
-  return currentMode==='all'||(currentMode==='passing'&&!st)||(currentMode==='staying'&&st);
-};
 
 function animCount(el,target,dur=900){
   const start=parseInt(el.dataset.val||0);
@@ -636,11 +637,15 @@ function updateStats(){
   }
 
   const maxFC=Math.max(stayC,passC,1);
+  const stayColor=getFlowColor({count:maxCount,distance:200});  // Staying代表色
+  const passColor=getFlowColor({count:maxCount,distance:50});   // Passing代表色
   $('sfStay').textContent=stayC.toLocaleString()+' pax';
   $('sfPass').textContent=passC.toLocaleString()+' pax';
   setTimeout(()=>{
     $('sfStayBar').style.width=Math.round(stayC/maxFC*100)+'%';
+    $('sfStayBar').style.background=stayColor;
     $('sfPassBar').style.width=Math.round(passC/maxFC*100)+'%';
+    $('sfPassBar').style.background=passColor;
   },120);
 }
 
