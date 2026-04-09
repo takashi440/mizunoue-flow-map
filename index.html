@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -12,227 +11,265 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
-–red:   #ff6464;
-–bg:    #0a0e1a;
-–panel: rgba(10,14,26,0.96);
-–brd:   rgba(255,100,100,0.18);
-–mut:   #4a5568;
-–sub:   #6b7a99;
-–txt:   #e0e6f0;
+  --red:   #ff6464;
+  --bg:    #0a0e1a;
+  --panel: rgba(10,14,26,0.96);
+  --brd:   rgba(255,100,100,0.18);
+  --mut:   #4a5568;
+  --sub:   #6b7a99;
+  --txt:   #e0e6f0;
 }
-
-- { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(–bg); color:var(–txt); font-family:‘Inter’,sans-serif; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--txt); font-family:'Inter',sans-serif; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
 
 /* HEADER */
 header {
-padding:8px 18px;
-background:var(–panel);
-border-bottom:1px solid var(–brd);
-display:flex; align-items:center; gap:18px;
-z-index:1000; flex-shrink:0;
+  padding:8px 18px;
+  background:var(--panel);
+  border-bottom:1px solid var(--brd);
+  display:flex; align-items:center; gap:18px;
+  z-index:1000; flex-shrink:0;
 }
 .logo { display:flex; align-items:center; gap:10px; flex-shrink:0; }
 .logo-mark { width:28px; height:28px; border-radius:6px; background:linear-gradient(135deg,#ff6464,#cc2222); display:flex; align-items:center; justify-content:center; font-size:14px; }
-.logo-text { font-family:‘Space Mono’,monospace; font-size:11px; letter-spacing:.13em; color:var(–red); line-height:1.4; }
-.logo-sub  { font-size:9px; color:var(–sub); letter-spacing:.08em; }
+.logo-text { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.13em; color:var(--red); line-height:1.4; }
+.logo-sub  { font-size:9px; color:var(--sub); letter-spacing:.08em; }
 
 .hstat-group { display:flex; gap:0; flex:1; }
 .hstat { flex:1; padding:3px 14px; border-left:1px solid rgba(255,255,255,0.06); min-width:0; }
-.hstat-label { font-size:9px; letter-spacing:.12em; color:var(–mut); text-transform:uppercase; margin-bottom:1px; }
-.hstat-val   { font-family:‘Space Mono’,monospace; font-size:15px; font-weight:700; color:var(–txt); }
-.hstat-val span { font-size:9px; color:var(–sub); margin-left:2px; }
+.hstat-label { font-size:9px; letter-spacing:.12em; color:var(--mut); text-transform:uppercase; margin-bottom:1px; }
+.hstat-val   { font-family:'Space Mono',monospace; font-size:15px; font-weight:700; color:var(--txt); }
+.hstat-val span { font-size:9px; color:var(--sub); margin-left:2px; }
 
 .toggle-group { display:flex; gap:5px; background:rgba(255,255,255,0.04); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.07); flex-shrink:0; }
-.toggle-btn   { padding:5px 12px; border-radius:5px; border:none; background:transparent; color:var(–sub); font-family:‘Inter’,sans-serif; font-size:11px; cursor:pointer; transition:all .2s; white-space:nowrap; }
-.toggle-btn.active { background:var(–red); color:#fff; font-weight:700; }
-.toggle-btn:hover:not(.active) { color:var(–txt); background:rgba(255,255,255,0.07); }
+.toggle-btn   { padding:5px 12px; border-radius:5px; border:none; background:transparent; color:var(--sub); font-family:'Inter',sans-serif; font-size:11px; cursor:pointer; transition:all .2s; white-space:nowrap; }
+.toggle-btn.active { background:var(--red); color:#fff; font-weight:700; }
+.toggle-btn:hover:not(.active) { color:var(--txt); background:rgba(255,255,255,0.07); }
 
-.date-badge { font-family:‘Space Mono’,monospace; font-size:10px; color:var(–sub); flex-shrink:0; border:1px solid rgba(255,255,255,0.08); padding:4px 10px; border-radius:5px; }
+.date-badge { font-family:'Space Mono',monospace; font-size:10px; color:var(--sub); flex-shrink:0; border:1px solid rgba(255,255,255,0.08); padding:4px 10px; border-radius:5px; }
 
 /* LAYOUT */
 .main { display:flex; flex:1; overflow:hidden; }
 #map-wrap { flex:1; position:relative; overflow:hidden; }
-#map { width:100%; height:100%; background:var(–bg); }
+#map { width:100%; height:100%; background:var(--bg); }
 
 /* MAP OVERLAY PANELS */
-.map-panel { position:absolute; z-index:650; background:var(–panel); border:1px solid var(–brd); border-radius:8px; padding:12px 15px; pointer-events:none; backdrop-filter:blur(4px); }
+.map-panel { position:absolute; z-index:650; background:var(--panel); border:1px solid var(--brd); border-radius:8px; padding:12px 15px; pointer-events:none; backdrop-filter:blur(4px); }
 
-#panel-ticker { top:14px; left:14px; min-width:185px; border-color:rgba(255,100,100,0.45); background:rgba(5,8,18,0.97); border-left:3px solid var(–red); }
-.ticker-head { font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(–mut); margin-bottom:9px; display:flex; align-items:center; gap:7px; }
+#panel-ticker { top:14px; left:14px; min-width:185px; border-color:rgba(255,100,100,0.45); background:rgba(5,8,18,0.97); border-left:3px solid var(--red); }
+.ticker-head { font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--mut); margin-bottom:9px; display:flex; align-items:center; gap:7px; }
 .live-dot { width:6px; height:6px; border-radius:50%; background:#44ff88; box-shadow:0 0 6px #44ff88; animation:blink 1.6s ease-in-out infinite; }
 @keyframes blink { 0%,100%{opacity:1}50%{opacity:.25} }
 .tick-row  { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:7px; }
-.tick-key  { font-size:10px; color:var(–sub); }
-.tick-num  { font-family:‘Space Mono’,monospace; font-size:19px; font-weight:700; color:var(–txt); transition:color .4s; }
-.tick-unit { font-size:9px; color:var(–mut); margin-left:2px; }
+.tick-key  { font-size:10px; color:var(--sub); }
+.tick-num  { font-family:'Space Mono',monospace; font-size:19px; font-weight:700; color:var(--txt); transition:color .4s; }
+.tick-unit { font-size:9px; color:var(--mut); margin-left:2px; }
 .tick-num.flash { color:#44ff88; }
 
 #panel-top { bottom:20px; left:14px; min-width:200px; }
-.top-lbl   { font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(–mut); margin-bottom:5px; }
-.top-route { font-size:13px; font-weight:700; color:var(–red); letter-spacing:.02em; margin-bottom:3px; }
-.top-meta  { font-size:10px; color:var(–sub); }
-.top-meta b { color:var(–txt); }
+.top-lbl   { font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--mut); margin-bottom:5px; }
+.top-route { font-size:13px; font-weight:700; color:var(--red); letter-spacing:.02em; margin-bottom:3px; }
+.top-meta  { font-size:10px; color:var(--sub); }
+.top-meta b { color:var(--txt); }
 
 #panel-leg { bottom:20px; right:270px; }
-.leg-row   { display:flex; align-items:center; gap:8px; font-size:10px; color:var(–sub); margin-bottom:4px; }
+.leg-row   { display:flex; align-items:center; gap:8px; font-size:10px; color:var(--sub); margin-bottom:4px; }
 .leg-dot   { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
 
 /* SIDEBAR */
-.sidebar { width:255px; background:var(–panel); border-left:1px solid var(–brd); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; }
-.sb-head  { padding:11px 16px; font-family:‘Space Mono’,monospace; font-size:9px; letter-spacing:.22em; color:var(–red); text-transform:uppercase; border-bottom:1px solid var(–brd); display:flex; justify-content:space-between; align-items:center; }
-.sb-cnt   { font-size:10px; color:var(–sub); background:rgba(255,100,100,.1); padding:2px 7px; border-radius:4px; }
+.sidebar { width:255px; background:var(--panel); border-left:1px solid var(--brd); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; }
+.sb-head  { padding:11px 16px; font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.22em; color:var(--red); text-transform:uppercase; border-bottom:1px solid var(--brd); display:flex; justify-content:space-between; align-items:center; }
+.sb-cnt   { font-size:10px; color:var(--sub); background:rgba(255,100,100,.1); padding:2px 7px; border-radius:4px; }
 .flow-list { overflow-y:auto; flex:1; padding:4px 0; }
 .flow-item { padding:9px 14px; border-bottom:1px solid rgba(255,255,255,.04); cursor:pointer; transition:background .15s; display:flex; align-items:center; gap:10px; }
 .flow-item:hover  { background:rgba(255,100,100,.06); }
 .flow-item.active { background:rgba(255,100,100,.12); }
 .flow-item.hidden { display:none; }
-.flow-rank { font-family:‘Space Mono’,monospace; font-size:9px; color:var(–mut); min-width:16px; text-align:right; }
+.flow-rank { font-family:'Space Mono',monospace; font-size:9px; color:var(--mut); min-width:16px; text-align:right; }
 .flow-rank.r1{color:#ffd700} .flow-rank.r2{color:#c0c0c0} .flow-rank.r3{color:#cd7f32}
 .flow-swatch { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
 .flow-bwrap  { flex:1; min-width:0; }
 .flow-route  { font-size:11px; font-weight:700; color:#c8d4e8; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.flow-meta   { font-size:9px; color:var(–mut); margin-bottom:3px; display:flex; gap:8px; }
+.flow-meta   { font-size:9px; color:var(--mut); margin-bottom:3px; display:flex; gap:8px; }
 .flow-bbg    { height:2px; background:rgba(255,255,255,.07); border-radius:2px; overflow:hidden; }
 .flow-bar    { height:100%; border-radius:2px; transition:width .7s ease; }
-.flow-cnt    { font-family:‘Space Mono’,monospace; font-size:12px; font-weight:700; min-width:36px; text-align:right; }
+.flow-cnt    { font-family:'Space Mono',monospace; font-size:12px; font-weight:700; min-width:36px; text-align:right; }
 
-.sb-foot     { padding:12px 16px; border-top:1px solid var(–brd); font-size:10px; color:var(–sub); }
+.sb-foot     { padding:12px 16px; border-top:1px solid var(--brd); font-size:10px; color:var(--sub); }
 .sf-row      { display:flex; justify-content:space-between; margin-bottom:4px; }
 .sf-bbg      { height:4px; background:rgba(255,255,255,.06); border-radius:2px; overflow:hidden; margin-bottom:8px; }
 .sf-bar      { height:100%; border-radius:2px; transition:width .8s ease; }
 
 /* EVENT BADGES */
 #event-strip {
-position:absolute; top:14px; left:50%; transform:translateX(-50%);
-z-index:660; display:flex; gap:8px; pointer-events:none;
-max-width:60%; flex-wrap:wrap; justify-content:center;
+  position:absolute; top:14px; left:50%; transform:translateX(-50%);
+  z-index:660; display:flex; gap:8px; pointer-events:none;
+  max-width:60%; flex-wrap:wrap; justify-content:center;
 }
 .event-badge {
-display:flex; align-items:center; gap:6px;
-background:rgba(10,14,26,0.92);
-border:1px solid rgba(255,255,255,0.15);
-border-radius:20px; padding:5px 12px;
-font-family:‘Space Mono’,monospace; font-size:10px;
-color:var(–txt); letter-spacing:.06em;
-backdrop-filter:blur(4px);
-animation:badgePulse 3s ease-in-out infinite;
+  display:flex; align-items:center; gap:6px;
+  background:rgba(10,14,26,0.92);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:20px; padding:5px 12px;
+  font-family:'Space Mono',monospace; font-size:10px;
+  color:var(--txt); letter-spacing:.06em;
+  backdrop-filter:blur(4px);
+  animation:badgePulse 3s ease-in-out infinite;
 }
 .event-badge-emoji { font-size:13px; }
 .event-badge-title { font-weight:700; }
-.event-badge-loc   { font-size:9px; color:var(–sub); margin-left:2px; }
+.event-badge-loc   { font-size:9px; color:var(--sub); margin-left:2px; }
 
 @keyframes badgePulse {
-0%,100% { box-shadow:0 0 0px rgba(255,255,255,0); }
-50%      { box-shadow:0 0 12px rgba(255,255,255,0.12); }
+  0%,100% { box-shadow:0 0 0px rgba(255,255,255,0); }
+  50%      { box-shadow:0 0 12px rgba(255,255,255,0.12); }
 }
 
 /* TIME SLIDER */
 #time-bar {
-position:absolute; bottom:0; left:0; right:255px; z-index:700;
-background:linear-gradient(to top, rgba(10,14,26,0.97) 70%, transparent);
-padding:14px 20px 16px;
-display:flex; flex-direction:column; gap:8px;
-pointer-events:auto;
+  position:absolute; bottom:0; left:0; right:255px; z-index:700;
+  background:linear-gradient(to top, rgba(10,14,26,0.97) 70%, transparent);
+  padding:14px 20px 16px;
+  display:flex; flex-direction:column; gap:8px;
+  pointer-events:auto;
 }
 .time-controls { display:flex; align-items:center; gap:12px; }
 #playBtn {
-width:34px; height:34px; border-radius:50%;
-background:var(–red); border:none; color:#fff;
-font-size:14px; cursor:pointer; flex-shrink:0;
-display:flex; align-items:center; justify-content:center;
-transition:all .2s; box-shadow:0 0 12px rgba(255,100,100,.4);
+  width:34px; height:34px; border-radius:50%;
+  background:var(--red); border:none; color:#fff;
+  font-size:14px; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .2s; box-shadow:0 0 12px rgba(255,100,100,.4);
 }
 #playBtn:hover { transform:scale(1.1); }
 .time-label {
-font-family:‘Space Mono’,monospace; font-size:18px; font-weight:700;
-color:var(–txt); min-width:80px; flex-shrink:0;
+  font-family:'Space Mono',monospace; font-size:18px; font-weight:700;
+  color:var(--txt); min-width:80px; flex-shrink:0;
 }
-.time-sub { font-size:10px; color:var(–sub); margin-top:1px; }
+.time-sub { font-size:10px; color:var(--sub); margin-top:1px; }
 #hourSlider {
-flex:1; -webkit-appearance:none; appearance:none;
-height:4px; border-radius:2px; outline:none; cursor:pointer;
-background:linear-gradient(to right, var(–red) 0%, var(–red) 0%, rgba(255,255,255,.12) 0%);
+  flex:1; -webkit-appearance:none; appearance:none;
+  height:4px; border-radius:2px; outline:none; cursor:pointer;
+  background:linear-gradient(to right, var(--red) 0%, var(--red) 0%, rgba(255,255,255,.12) 0%);
 }
 #hourSlider::-webkit-slider-thumb {
--webkit-appearance:none; width:16px; height:16px;
-border-radius:50%; background:var(–red);
-box-shadow:0 0 8px rgba(255,100,100,.6); cursor:pointer;
+  -webkit-appearance:none; width:16px; height:16px;
+  border-radius:50%; background:var(--red);
+  box-shadow:0 0 8px rgba(255,100,100,.6); cursor:pointer;
 }
 .time-mode-group { display:flex; gap:5px; }
 .time-mode-btn {
-padding:4px 10px; border-radius:4px; border:1px solid rgba(255,255,255,.1);
-background:transparent; color:var(–sub); font-size:10px; cursor:pointer;
-font-family:‘Space Mono’,monospace; transition:all .2s;
+  padding:4px 10px; border-radius:4px; border:1px solid rgba(255,255,255,.1);
+  background:transparent; color:var(--sub); font-size:10px; cursor:pointer;
+  font-family:'Space Mono',monospace; transition:all .2s;
 }
-.time-mode-btn.active { background:rgba(255,100,100,.15); color:var(–red); border-color:var(–red); }
+.time-mode-btn.active { background:rgba(255,100,100,.15); color:var(--red); border-color:var(--red); }
 .hour-ticks { display:flex; justify-content:space-between; padding:0 2px; }
-.hour-tick { font-size:8px; color:var(–mut); font-family:‘Space Mono’,monospace; }
+.hour-tick { font-size:8px; color:var(--mut); font-family:'Space Mono',monospace; }
 
 @media (max-width:768px) {
-#time-bar { right:0; }
+  #time-bar { right:0; }
 }
 
 /* LEAFLET */
 .leaflet-tile { filter:invert(1) hue-rotate(180deg) brightness(.75) saturate(.4); }
-.leaflet-top.leaflet-left { top:210px; left:14px; }
+.leaflet-top.leaflet-left { top:250px; left:14px; }
 
 /* DRAWER TOGGLE (mobile only) */
 #drawer-btn {
-display:none;
-position:absolute; bottom:20px; right:16px; z-index:900;
-background:var(–red); border:none; color:#fff;
-font-family:‘Space Mono’,monospace; font-size:11px; font-weight:700;
-padding:10px 16px; border-radius:24px; cursor:pointer;
-box-shadow:0 4px 20px rgba(255,100,100,.45);
-letter-spacing:.08em;
+  display:none;
+  position:absolute; bottom:20px; right:16px; z-index:900;
+  background:var(--red); border:none; color:#fff;
+  font-family:'Space Mono',monospace; font-size:11px; font-weight:700;
+  padding:10px 16px; border-radius:24px; cursor:pointer;
+  box-shadow:0 4px 20px rgba(255,100,100,.45);
+  letter-spacing:.08em;
 }
 
 /* RESPONSIVE */
+@media (max-width: 1100px) {
+  .hstat-group { display:none; }
+}
+@media (max-width: 900px) {
+  #weatherBadge { display:none; }
+  #soundBtn { padding:4px 8px; font-size:9px; }
+}
 @media (max-width: 768px) {
-.hstat-group { display:none; }
-header { padding:7px 12px; gap:10px; }
-.logo-text { font-size:10px; }
-.logo-sub  { display:none; }
-.date-badge { font-size:9px; padding:3px 8px; }
-.toggle-btn { padding:5px 9px; font-size:10px; }
+  header { padding:7px 12px; gap:6px; flex-wrap:wrap; overflow:visible; }
+  .logo-text { font-size:10px; }
+  .logo-sub  { display:none; }
+  .date-badge { font-size:9px; padding:3px 8px; }
+  .toggle-btn { padding:4px 8px; font-size:10px; }
+  #soundBtn { font-size:9px; padding:3px 7px; }
+  #dateBadge { display:none; }
+  #scaleBtnGroup { order:99; width:100%; justify-content:center; margin-top:2px; }
+  .scale-btn { flex:1; text-align:center; }
 
-.sidebar {
-position:absolute; bottom:0; left:0; right:0;
-width:100%; height:62vh;
-border-left:none; border-top:1px solid var(–brd);
-border-radius:16px 16px 0 0;
-transform:translateY(100%);
-transition:transform .35s cubic-bezier(.4,0,.2,1);
-z-index:800;
+  .sidebar {
+    position:absolute; bottom:0; left:0; right:0;
+    width:100%; height:62vh;
+    border-left:none; border-top:1px solid var(--brd);
+    border-radius:16px 16px 0 0;
+    transform:translateY(100%);
+    transition:transform .35s cubic-bezier(.4,0,.2,1);
+    z-index:800;
+  }
+  .sidebar.open { transform:translateY(0); }
+  .sb-head { position:relative; padding-top:20px; cursor:pointer; }
+  .sb-head::before {
+    content:''; display:block; width:36px; height:4px;
+    background:rgba(255,255,255,.2); border-radius:2px;
+    position:absolute; top:8px; left:50%; transform:translateX(-50%);
+  }
+
+  #panel-ticker { top:10px; left:10px; padding:9px 12px; min-width:155px; }
+  .tick-num  { font-size:15px; }
+  .tick-row  { margin-bottom:5px; }
+  #panel-top { display:none; }
+  #panel-leg { display:none; }
+
+  .leaflet-top.leaflet-left { top:auto; bottom:76px; left:10px; }
+  #drawer-btn { display:block; }
 }
-.sidebar.open { transform:translateY(0); }
-.sb-head { position:relative; padding-top:20px; cursor:pointer; }
-.sb-head::before {
-content:’’; display:block; width:36px; height:4px;
-background:rgba(255,255,255,.2); border-radius:2px;
-position:absolute; top:8px; left:50%; transform:translateX(-50%);
+/* EXHIBITION MODE */
+body.exhibition header  { display:none; }
+body.exhibition .sidebar { display:none; }
+body.exhibition #panel-ticker { display:none; }
+body.exhibition #panel-top    { display:none; }
+body.exhibition #panel-leg    { display:none; }
+body.exhibition .leaflet-control-attribution { display:none; }
+body.exhibition .leaflet-control-zoom a {
+  background: rgba(10,14,26,0.5) !important;
+  color: rgba(255,255,255,0.25) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+body.exhibition .leaflet-control-zoom a:hover {
+  background: rgba(10,14,26,0.8) !important;
+  color: rgba(255,255,255,0.6) !important;
+}
+body.exhibition #exit-exhibition {
+  display:flex !important;
+}
+#exit-exhibition {
+  display:none;
+  position:fixed; top:12px; right:12px; z-index:9999;
+  gap:8px;
+}
+#exit-exhibition button {
+  background:rgba(10,14,26,0.85); border:1px solid rgba(255,100,100,0.3);
+  color:var(--sub); font-family:'Space Mono',monospace; font-size:9px;
+  padding:5px 10px; border-radius:5px; cursor:pointer; letter-spacing:.08em;
 }
 
-#panel-ticker { top:10px; left:10px; padding:9px 12px; min-width:155px; }
-.tick-num  { font-size:15px; }
-.tick-row  { margin-bottom:5px; }
-#panel-top { display:none; }
-#panel-leg { display:none; }
-
-.leaflet-top.leaflet-left { top:auto; bottom:76px; left:10px; }
-#drawer-btn { display:block; }
-}
-.custom-marker { display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid #ff6464; background:rgba(0,0,8,.85); color:#fff; font-family:‘Space Mono’,monospace; font-weight:700; cursor:pointer; }
-.leaflet-popup-content-wrapper { background:rgba(10,14,26,.96); border:1px solid rgba(255,100,100,.35); border-radius:6px; color:var(–txt); font-family:‘Inter’,sans-serif; box-shadow:0 4px 24px rgba(0,0,0,.5); }
+.custom-marker { display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid #ff6464; background:rgba(0,0,8,.85); color:#fff; font-family:'Space Mono',monospace; font-weight:700; cursor:pointer; }
+.leaflet-popup-content-wrapper { background:rgba(10,14,26,.96); border:1px solid rgba(255,100,100,.35); border-radius:6px; color:var(--txt); font-family:'Inter',sans-serif; box-shadow:0 4px 24px rgba(0,0,0,.5); }
 .leaflet-popup-tip { background:rgba(10,14,26,.96); }
-.popup-title { font-weight:700; font-size:13px; color:var(–red); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(255,100,100,.2); }
-.popup-row   { font-size:12px; color:var(–sub); margin-bottom:4px; display:flex; justify-content:space-between; gap:12px; }
-.popup-row span { color:var(–txt); font-weight:700; }
+.popup-title { font-weight:700; font-size:13px; color:var(--red); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(255,100,100,.2); }
+.popup-row   { font-size:12px; color:var(--sub); margin-bottom:4px; display:flex; justify-content:space-between; gap:12px; }
+.popup-row span { color:var(--txt); font-weight:700; }
 .popup-bbg  { height:3px; background:rgba(255,255,255,.08); border-radius:2px; overflow:hidden; margin-top:8px; }
 .popup-bar  { height:100%; border-radius:2px; }
 </style>
-
 </head>
 <body>
 
@@ -275,7 +312,25 @@ position:absolute; top:8px; left:50%; transform:translateX(-50%);
   </div>
   <div class="date-badge" id="weatherBadge" style="min-width:120px;text-align:center;">☁️ —</div>
   <div class="date-badge" id="dateBadge">—</div>
+  <button id="soundBtn" onclick="toggleSound()" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--sub);font-family:'Space Mono',monospace;font-size:10px;padding:4px 10px;border-radius:5px;cursor:pointer;letter-spacing:.08em;transition:all .2s;">🔇 Sound</button>
+  <div id="scaleBtnGroup" style="display:flex;gap:3px;background:rgba(255,255,255,0.04);padding:3px;border-radius:6px;border:1px solid rgba(255,255,255,0.07);">
+    <button class="scale-btn active" data-scale="lydian"     onclick="audioEngine.setScale('lydian')"     style="padding:4px 9px;border-radius:4px;border:none;background:rgba(68,255,136,0.15);color:#44ff88;font-family:'Space Mono',monospace;font-size:9px;cursor:pointer;transition:all .2s;">Lydian</button>
+    <button class="scale-btn"        data-scale="wholetone"  onclick="audioEngine.setScale('wholetone')"  style="padding:4px 9px;border-radius:4px;border:none;background:transparent;color:var(--sub);font-family:'Space Mono',monospace;font-size:9px;cursor:pointer;transition:all .2s;">Whole</button>
+    <button class="scale-btn"        data-scale="overtone"   onclick="audioEngine.setScale('overtone')"   style="padding:4px 9px;border-radius:4px;border:none;background:transparent;color:var(--sub);font-family:'Space Mono',monospace;font-size:9px;cursor:pointer;transition:all .2s;">Over</button>
+    <button class="scale-btn"        data-scale="pentatonic" onclick="audioEngine.setScale('pentatonic')" style="padding:4px 9px;border-radius:4px;border:none;background:transparent;color:var(--sub);font-family:'Space Mono',monospace;font-size:9px;cursor:pointer;transition:all .2s;">Penta</button>
+  </div>
+  <div id="toneBtnGroup" style="display:flex;gap:3px;background:rgba(255,255,255,0.04);padding:3px;border-radius:6px;border:1px solid rgba(255,255,255,0.07);">
+    <button class="tone-btn active" data-tone="ambient" onclick="audioEngine.setToneMode('ambient')" style="padding:4px 9px;border-radius:4px;border:none;background:rgba(68,255,136,0.15);color:#44ff88;font-family:'Space Mono',monospace;font-size:9px;cursor:pointer;transition:all .2s;">Ambient</button>
+    <button class="tone-btn"        data-tone="click"   onclick="audioEngine.setToneMode('click')"   style="padding:4px 9px;border-radius:4px;border:none;background:transparent;color:var(--sub);font-family:'Space Mono',monospace;font-size:9px;cursor:pointer;transition:all .2s;">Click</button>
+  </div>
+  <button id="loopBtn" onclick="toggleLoop()" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--sub);font-family:'Space Mono',monospace;font-size:10px;padding:4px 10px;border-radius:5px;cursor:pointer;letter-spacing:.08em;transition:all .2s;">⟳ Loop</button>
+  <button onclick="enterExhibition()" style="background:transparent;border:1px solid rgba(255,100,100,0.25);color:var(--red);font-family:'Space Mono',monospace;font-size:10px;padding:4px 10px;border-radius:5px;cursor:pointer;letter-spacing:.08em;transition:all .2s;">⬛ Exhibition</button>
 </header>
+
+<div id="exit-exhibition">
+  <button onclick="exitExhibition()">✕ Exit</button>
+  <button onclick="toggleLoop()" id="loopBtnEx">⟳ Loop: OFF</button>
+</div>
 
 <div id="loading" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(10,14,26,.95);border:1px solid rgba(255,100,100,.4);padding:16px 28px;border-radius:8px;color:#ff6464;font-family:'Space Mono',monospace;font-size:13px;z-index:9999;letter-spacing:.1em;"></div>
 
@@ -284,60 +339,59 @@ position:absolute; top:8px; left:50%; transform:translateX(-50%);
     <div id="map"></div>
     <button id="drawer-btn" onclick="toggleDrawer()">≡ Flows</button>
 
-```
-<!-- Live ticker -->
-<div class="map-panel" id="panel-ticker">
-  <div class="ticker-head"><div class="live-dot"></div>Live · Today</div>
-  <div class="tick-row"><span class="tick-key">Total Visitors</span><span><span class="tick-num" id="tTotal">—</span><span class="tick-unit">pax</span></span></div>
-  <div class="tick-row"><span class="tick-key">Detected Nodes</span><span><span class="tick-num" id="tNodes">—</span><span class="tick-unit">pts</span></span></div>
-  <div class="tick-row"><span class="tick-key">Active Flows</span><span><span class="tick-num" id="tFlows">—</span><span class="tick-unit">routes</span></span></div>
-  <div class="tick-row"><span class="tick-key">Staying Rate</span><span><span class="tick-num" id="tStay">—</span><span class="tick-unit">%</span></span></div>
-</div>
-
-<!-- Top route -->
-<div class="map-panel" id="panel-top">
-  <div class="top-lbl">▲ Top Route</div>
-  <div class="top-route" id="topName">—</div>
-  <div class="top-meta" id="topMeta">—</div>
-</div>
-
-<!-- Legend -->
-<div class="map-panel" id="panel-leg">
-  <div class="leg-row"><div class="leg-dot" id="leg-stay-dot" style="background:radial-gradient(#ffaa60,#ff3030);box-shadow:0 0 5px #ff6040;"></div>Staying ≥150m</div>
-  <div class="leg-row" style="flex-direction:column;align-items:flex-start;gap:3px;">
-    <span style="font-size:9px;color:var(--sub);">Passing &lt;150m · temperature</span>
-    <div style="width:100%;height:6px;border-radius:3px;background:linear-gradient(to right,#a0d8ff,#00e5ff,#00e0c0,#00e060,#aaee00);"></div>
-    <div style="display:flex;justify-content:space-between;width:100%;font-size:8px;color:var(--mut);"><span>−5°C</span><span>10°C</span><span>20°C</span><span>35°C</span></div>
-  </div>
-  <div style="font-size:9px;color:#4a5568;margin-top:5px;line-height:1.8;">Node size = visitor count<br>Ring pulse = presence intensity</div>
-</div>
-<!-- Event Badges -->
-<div id="event-strip"></div>
-
-<!-- Time Slider -->
-<div id="time-bar">
-  <div class="time-controls">
-    <button id="playBtn" title="Play/Pause">▶</button>
-    <div>
-      <div class="time-label" id="timeLabel">All Day</div>
-      <div class="time-sub" id="timeSubLabel">showing full day</div>
+    <!-- Live ticker -->
+    <div class="map-panel" id="panel-ticker">
+      <div class="ticker-head"><div class="live-dot"></div>Live · Today</div>
+      <div class="tick-row"><span class="tick-key">Total Visitors</span><span><span class="tick-num" id="tTotal">—</span><span class="tick-unit">pax</span></span></div>
+      <div class="tick-row"><span class="tick-key">Detected Nodes</span><span><span class="tick-num" id="tNodes">—</span><span class="tick-unit">pts</span></span></div>
+      <div class="tick-row"><span class="tick-key">Active Flows</span><span><span class="tick-num" id="tFlows">—</span><span class="tick-unit">routes</span></span></div>
+      <div class="tick-row"><span class="tick-key">Staying Rate</span><span><span class="tick-num" id="tStay">—</span><span class="tick-unit">%</span></span></div>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);margin:6px 0 5px"></div>
+      <div class="tick-row"><span class="tick-key">Shoutengai</span><span><span class="tick-num" id="tShoutengai">—</span><span class="tick-unit">pax</span></span></div>
     </div>
-    <input type="range" id="hourSlider" min="-1" max="23" value="-1" step="1">
-    <div class="time-mode-group">
-      <button class="time-mode-btn active" data-mode="all" id="timeModeAll">All</button>
-      <button class="time-mode-btn" data-mode="hour" id="timeModeHour">Hourly</button>
-    </div>
-  </div>
-  <div class="hour-ticks">
-    <span class="hour-tick">0</span><span class="hour-tick">3</span>
-    <span class="hour-tick">6</span><span class="hour-tick">9</span>
-    <span class="hour-tick">12</span><span class="hour-tick">15</span>
-    <span class="hour-tick">18</span><span class="hour-tick">21</span>
-    <span class="hour-tick">23</span>
-  </div>
-</div>
-```
 
+    <!-- Top route -->
+    <div class="map-panel" id="panel-top">
+      <div class="top-lbl">▲ Top Route</div>
+      <div class="top-route" id="topName">—</div>
+      <div class="top-meta" id="topMeta">—</div>
+    </div>
+
+    <!-- Legend -->
+    <div class="map-panel" id="panel-leg">
+      <div class="leg-row"><div class="leg-dot" id="leg-stay-dot" style="background:radial-gradient(#ffaa60,#ff3030);box-shadow:0 0 5px #ff6040;"></div>Staying ≥150m</div>
+      <div class="leg-row" style="flex-direction:column;align-items:flex-start;gap:3px;">
+        <span style="font-size:9px;color:var(--sub);">Passing &lt;150m · temperature</span>
+        <div style="width:100%;height:6px;border-radius:3px;background:linear-gradient(to right,#a0d8ff,#00e5ff,#00e0c0,#00e060,#aaee00);"></div>
+        <div style="display:flex;justify-content:space-between;width:100%;font-size:8px;color:var(--mut);"><span>−5°C</span><span>10°C</span><span>20°C</span><span>35°C</span></div>
+      </div>
+      <div style="font-size:9px;color:#4a5568;margin-top:5px;line-height:1.8;">Node size = visitor count<br>Ring pulse = presence intensity</div>
+    </div>
+    <!-- Event Badges -->
+    <div id="event-strip"></div>
+
+    <!-- Time Slider -->
+    <div id="time-bar">
+      <div class="time-controls">
+        <button id="playBtn" title="Play/Pause">▶</button>
+        <div>
+          <div class="time-label" id="timeLabel">All Day</div>
+          <div class="time-sub" id="timeSubLabel">showing full day</div>
+        </div>
+        <input type="range" id="hourSlider" min="-1" max="23" value="-1" step="1">
+        <div class="time-mode-group">
+          <button class="time-mode-btn active" data-mode="all" id="timeModeAll">All</button>
+          <button class="time-mode-btn" data-mode="hour" id="timeModeHour">Hourly</button>
+        </div>
+      </div>
+      <div class="hour-ticks">
+        <span class="hour-tick">0</span><span class="hour-tick">3</span>
+        <span class="hour-tick">6</span><span class="hour-tick">9</span>
+        <span class="hour-tick">12</span><span class="hour-tick">15</span>
+        <span class="hour-tick">18</span><span class="hour-tick">21</span>
+        <span class="hour-tick">23</span>
+      </div>
+    </div>
   </div>
 
   <div class="sidebar">
@@ -346,15 +400,25 @@ position:absolute; top:8px; left:50%; transform:translateX(-50%);
     <div class="sb-foot">
       <div class="sf-row"><span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);">Visitor Split</span></div>
       <div class="sf-row"><span>Staying</span><span id="sfStay" style="color:var(--txt);font-weight:700;">—</span></div>
-      <div class="sf-bbg"><div class="sf-bar" id="sfStayBar" style="width:0%;background:linear-gradient(to right,#ffaa60,#ff3030);"></div></div>
+      <div class="sf-bbg"><div class="sf-bar" id="sfStayBar" style="width:0%;"></div></div>
       <div class="sf-row"><span>Passing</span><span id="sfPass" style="color:var(--txt);font-weight:700;">—</span></div>
-      <div class="sf-bbg"><div class="sf-bar" id="sfPassBar" style="width:0%;background:linear-gradient(to right,#88ddff,#4488ff);"></div></div>
+      <div class="sf-bbg"><div class="sf-bar" id="sfPassBar" style="width:0%;"></div></div>
     </div>
   </div>
 </div>
 
 <script>
 const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbx044_Lz32U4iWo3dvQ1-7wp-OY8SQqf_DjgIhw_XtjRcof2JLW83JdRz1c9Xw6YZ81/exec';
+
+// ── XSS対策: APIデータをHTMLに展開する前にエスケープ ──
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 let locations={}, flows=[], maxCount=1, minCount=0, presence={}, presenceMax=1;
 
@@ -432,6 +496,7 @@ let allFlows=[], allPresence=[];
 let currentHour=-1;
 let isPlaying=false;
 let playTimer=null;
+let loopPlay=false;
 const leafletMarkers=[], sideItems=[];
 
 const $=id=>document.getElementById(id);
@@ -443,14 +508,15 @@ function heatColor(count,alpha=1,mn=null,mx=null){
   const t=hi===lo?1:(count-lo)/(hi-lo);
   return `rgba(255,${Math.round(180*(1-t))},${Math.round(180*(1-t))},${alpha})`;
 }
-// ★ isStaying/isVisible は getFlowColor より先に定義
+
+// ★ isStaying を先に定義（getFlowColor が参照するため）
 const isStaying=d=>d>=150;
 const isVisible=f=>{
   const st=isStaying(f.distance);
   return currentMode==='all'||(currentMode==='passing'&&!st)||(currentMode==='staying'&&st);
 };
 
-// 粒と同じロジックで色を返す（サイドバー用）
+// ★ 粒と同じロジックで色を返す（サイドバー・フッターバー共通）
 function getFlowColor(flow){
   const r=maxCount>minCount?(flow.count-minCount)/(maxCount-minCount):1;
   let cr,cg,cb;
@@ -464,17 +530,17 @@ function getFlowColor(flow){
       month>=6&&month<=8?[20,38]:
       month>=9&&month<=11?[10,28]:[-2,15];
     const t=weather.temp!==null?Math.max(0,Math.min(1,(weather.temp-tMin)/(tMax-tMin))):0.4;
-    if(t<0.25){      const u=t/0.25;        cr=Math.round(u*20);       cg=Math.round(200+u*55); cb=255;}
-    else if(t<0.5){  const u=(t-.25)/.25;   cr=Math.round(20+u*10);    cg=255;                  cb=Math.round(255-u*100);}
-    else if(t<0.75){ const u=(t-.5)/.25;    cr=Math.round(30+u*50);    cg=255;                  cb=Math.round(155-u*100);}
-    else{            const u=(t-.75)/.25;   cr=Math.round(80+u*120);   cg=Math.round(255-u*40); cb=Math.round(55-u*40);}
+    if(t<0.25){      const u=t/0.25;       cr=Math.round(u*20);       cg=Math.round(200+u*55); cb=255;}
+    else if(t<0.5){  const u=(t-.25)/.25;  cr=Math.round(20+u*10);    cg=255;                  cb=Math.round(255-u*100);}
+    else if(t<0.75){ const u=(t-.5)/.25;   cr=Math.round(30+u*50);    cg=255;                  cb=Math.round(155-u*100);}
+    else{            const u=(t-.75)/.25;  cr=Math.round(80+u*120);   cg=Math.round(255-u*40); cb=Math.round(55-u*40);}
   }
-  // 湿度くすみも反映
-  const humidFactor=Math.max(0,(weather.humidity-40)/60)*0.4;
+  // 湿度くすみ
+  const hf=Math.max(0,(weather.humidity-40)/60)*0.4;
   const gray=(cr+cg+cb)/3;
-  cr=Math.round(cr+(gray-cr)*humidFactor);
-  cg=Math.round(cg+(gray-cg)*humidFactor);
-  cb=Math.round(cb+(gray-cb)*humidFactor);
+  cr=Math.round(cr+(gray-cr)*hf);
+  cg=Math.round(cg+(gray-cg)*hf);
+  cb=Math.round(cb+(gray-cb)*hf);
   return `rgb(${cr},${cg},${cb})`;
 }
 
@@ -579,9 +645,9 @@ function renderEventBadges(){
   strip.innerHTML = '';
   if(!todayEvents || todayEvents.length === 0) return;
   todayEvents.forEach(ev => {
-    const meta = EVENT_META[ev.title] || { emoji:'📌', color:'#aaaaaa', en:ev.title };
+    const meta = EVENT_META[ev.title] || { emoji:'📌', color:'#aaaaaa', en:escapeHTML(ev.title) };
     const locs = ev.locations ? ev.locations.split(',').map(l=>l.trim()) : [];
-    const locText = locs.length > 0 ? locs.map(l=>l.replace('棟','')).join('·') : '';
+    const locText = locs.length > 0 ? locs.map(l=>escapeHTML(l.replace('棟',''))).join('·') : '';
     const badge = document.createElement('div');
     badge.className = 'event-badge';
     badge.style.borderColor = meta.color + '66';
@@ -629,6 +695,8 @@ function updateStats(){
   animCount($('tNodes'),Object.keys(presence).length);
   animCount($('tFlows'),flows.length);
   animCount($('tStay'),stayR);
+  const shoutengaiV=Object.entries(presence).filter(([k])=>k.includes('棟')).reduce((s,[,p])=>s+p.count,0);
+  animCount($('tShoutengai'),shoutengaiV);
 
   if(flows.length){
     const top=[...flows].sort((a,b)=>b.count-a.count)[0];
@@ -636,9 +704,10 @@ function updateStats(){
     $('topMeta').innerHTML=`<b>${top.count.toLocaleString()}</b> visitors · <b>${top.distance}m</b> · ${isStaying(top.distance)?'Staying':'Passing'}`;
   }
 
+  // ★ フッターバーの色を粒と同じカラーロジックで設定
   const maxFC=Math.max(stayC,passC,1);
-  const stayColor=getFlowColor({count:maxCount,distance:200});  // Staying代表色
-  const passColor=getFlowColor({count:maxCount,distance:50});   // Passing代表色
+  const stayColor=getFlowColor({count:maxCount,distance:200});
+  const passColor=getFlowColor({count:maxCount,distance:50});
   $('sfStay').textContent=stayC.toLocaleString()+' pax';
   $('sfPass').textContent=passC.toLocaleString()+' pax';
   setTimeout(()=>{
@@ -665,6 +734,250 @@ dc.onAdd=function(){
 };
 dc.addTo(leafletMap);
 
+// ── AUDIO ENGINE ─────────────────────────────
+const audioEngine = (() => {
+  let ctx = null, masterGain = null, reverbNode = null, reverbGain = null;
+  let enabled = false;
+  let activeVoices = 0;
+  const MAX_VOICES = 24; // 同時発音数の上限
+
+  const SCALES = {
+    lydian:    [65.4,73.4,82.4,92.5,98,110,123.5,130.8,146.8,164.8,185,196,220,246.9,261.6], // C Lydian（浮遊感）
+    wholetone: [65.4,73.4,82.4,92.5,103.8,116.5,130.8,146.8,164.8,185,207.7,233.1,261.6],    // 全音音階（夢）
+    overtone:  [55,110,165,220,275,330,385,440,495,550,660,770],                               // 倍音列（最アンビエント）
+    pentatonic:[110,123.5,138.6,165,185,220,247,277.2,330,370,440,493.9,554.4,659.3,739.99],  // 元のペンタトニック
+  };
+  const SCALE_NAMES = ['lydian','wholetone','overtone','pentatonic'];
+  const SCALE_LABELS = { lydian:'Lydian', wholetone:'Whole Tone', overtone:'Overtone', pentatonic:'Pentatonic' };
+  let scaleIdx = 0; // デフォルト: Lydian
+  let toneMode = 'ambient'; // 'ambient' | 'click'
+
+  function currentScale(){ return SCALES[SCALE_NAMES[scaleIdx]]; }
+  function nextScale(){
+    scaleIdx = (scaleIdx + 1) % SCALE_NAMES.length;
+    setScale(SCALE_NAMES[scaleIdx]);
+  }
+
+  function strHash(s){
+    let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))&0xffff; return h;
+  }
+
+  function makeReverb(actx, dur=2.5){
+    const sr=actx.sampleRate, len=Math.round(sr*dur);
+    const buf=actx.createBuffer(2,len,sr);
+    for(let c=0;c<2;c++){
+      const ch=buf.getChannelData(c);
+      for(let i=0;i<len;i++) ch[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.2);
+    }
+    const conv=actx.createConvolver(); conv.buffer=buf; return conv;
+  }
+
+  function init(){
+    if(ctx) return;
+    ctx=new(window.AudioContext||window.webkitAudioContext)();
+    masterGain=ctx.createGain(); masterGain.gain.value=0.3;
+    masterGain.connect(ctx.destination);
+    reverbNode=makeReverb(ctx,2.5);
+    reverbGain=ctx.createGain(); reverbGain.gain.value=0.45;
+    reverbNode.connect(reverbGain); reverbGain.connect(masterGain);
+  }
+
+  function spawn(flow){
+    if(!enabled||!ctx) return;
+    if(activeVoices >= MAX_VOICES) return;
+
+    const staying=isStaying(flow.distance);
+
+    // ── 天気パラメータの正規化 ──────────────────
+    const windF   = Math.min(weather.wind / 20, 1);          // 0〜1（20m/sで最大）
+    const humidF  = Math.max(0, (weather.humidity - 40) / 60); // 0〜1（湿度40〜100%）
+    const tempF   = weather.temp !== null
+      ? Math.max(0, Math.min(1, (weather.temp + 5) / 45))    // -5〜40℃を0〜1に
+      : 0.5;
+
+    // ── 拠点固有の音程（loc_idのハッシュ → 常に同じ拠点=同じ音） ──
+    const scale = currentScale();
+    const fromFreq = scale[strHash(flow.from) % scale.length]; // 出発拠点の音
+    const toFreq   = scale[strHash(flow.to)   % scale.length]; // 到着拠点の音
+    const tempDetune = (tempF - 0.5) * 30;
+
+    // ── 音量 ────────────────────────────────────
+    const r = maxCount > minCount ? (flow.count - minCount) / (maxCount - minCount) : 0.5;
+    const vol = staying ? 0.05 + r * 0.08 : 0.02 + r * 0.04; // 全体的に音量を下げる
+
+    // ── decay：プチプチ感のために短く ────────────
+    const decayBase = staying ? 1.2 : 0.12;                   // passing は0.12sで即消え
+    const decay = staying
+      ? decayBase
+      : decayBase * (1 - windF * 0.4);
+
+    // ── デチューン：控えめに ──────────────────────
+    const detuneRange = staying ? 3 : 4 + windF * 8;          // 割れ防止で小さく
+
+    // ── リバーブ深さ：湿度で変化 ────────────────
+    const reverbMix = staying ? 0.3 + humidF * 0.35 : 0;
+
+    // ── 拠点ごとの波形（sine/triangleのみ・sawtooth廃止） ──
+    function locWave(locId){
+      const h = strHash(locId) % 2;
+      return staying
+        ? 'sine'                                               // staying は常にsine
+        : h === 0 ? 'sine' : 'triangle';                      // passing は拠点で sine/triangle
+    }
+    const fromWave = locWave(flow.from);
+    const toWave   = locWave(flow.to);
+
+    // ── 出発音（immediately） ────────────────────
+    const t = ctx.currentTime;
+    function playNote(freq, startTime, vol, decay, detune, waveType){
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = waveType;
+      osc.frequency.value = staying ? freq : freq * 2;
+      osc.detune.value = (Math.random() - 0.5) * detuneRange + tempDetune + detune;
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(vol, startTime + 0.008); // 鋭いattack
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + decay);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      if(staying && reverbMix > 0){
+        const rv = ctx.createGain(); rv.gain.value = reverbMix;
+        gain.connect(rv); rv.connect(reverbNode);
+      }
+      activeVoices++;
+      osc.onended = () => { activeVoices = Math.max(0, activeVoices - 1); };
+      osc.start(startTime); osc.stop(startTime + decay + 0.05);
+    }
+
+    if(toneMode === 'click'){
+      // 池田亮二スタイル: ノイズバースト + 高周波sine
+      const dur = staying ? 0.004 : 0.002;
+      const bufSize = Math.ceil(ctx.sampleRate * dur);
+      const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for(let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      const ng = ctx.createGain();
+      ng.gain.setValueAtTime(vol * 2.5, t);
+      ng.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(ng); ng.connect(masterGain);
+      activeVoices++;
+      src.onended = () => { activeVoices = Math.max(0, activeVoices - 1); };
+      src.start(t);
+
+      const cFreq = staying
+        ? 2000 + strHash(flow.from) % 4000
+        : 7000 + strHash(flow.from) % 11000;
+      const cosc = ctx.createOscillator();
+      const cg = ctx.createGain();
+      cosc.type = 'sine';
+      cosc.frequency.value = cFreq;
+      cg.gain.setValueAtTime(vol * 1.2, t);
+      cg.gain.exponentialRampToValueAtTime(0.0001, t + dur * 1.5);
+      cosc.connect(cg); cg.connect(masterGain);
+      activeVoices++;
+      cosc.onended = () => { activeVoices = Math.max(0, activeVoices - 1); };
+      cosc.start(t); cosc.stop(t + dur * 1.5 + 0.001);
+      return;
+    }
+
+    playNote(fromFreq, t,                vol * 0.9, decay,        0, fromWave); // 出発：すぐ
+    playNote(toFreq,   t + decay * 0.85, vol * 0.7, decay * 0.6, 5, toWave);  // 到着：終盤
+  }
+
+  // ── ENO PHASE LOOPS ──────────────────────────
+  // 異なる間隔で同じ音列を繰り返す → 少しずつズレて無限に変化するテクスチャ
+  let phaseTimers = [];
+  const PHASE_INTERVALS  = [13700, 17300, 22100, 28700]; // ms（素数的な間隔でズレが最大化）
+  const PHASE_NOTE_IDX   = [0, 2, 4, 6];                 // スケールの疎な音程を使う
+
+  function startPhaseLoops(){
+    stopPhaseLoops();
+    const scale = currentScale();
+    PHASE_INTERVALS.forEach((interval, i) => {
+      const freq = scale[PHASE_NOTE_IDX[i] % scale.length];
+
+      function playVoice(){
+        if(!enabled || !ctx) return;
+        const t = ctx.currentTime;
+
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const rv   = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        osc.detune.value = (Math.random() - 0.5) * 4; // 微妙な揺らぎ
+
+        // ゆっくり立ち上がり → 長く残響
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.055, t + 2.0);   // 2秒で立ち上がる
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + 7.0); // 7秒で消える
+
+        rv.gain.value = 0.6;
+        osc.connect(gain);
+        gain.connect(masterGain);
+        gain.connect(rv); rv.connect(reverbNode); // 常にリバーブ
+
+        osc.start(t); osc.stop(t + 7.2);
+        phaseTimers[i] = setTimeout(playVoice, interval);
+      }
+
+      // 各ボイスをずらして開始（最初のフェーズ差を作る）
+      phaseTimers[i] = setTimeout(playVoice, i * 800);
+    });
+  }
+
+  function stopPhaseLoops(){
+    phaseTimers.forEach(id => clearTimeout(id));
+    phaseTimers = [];
+  }
+
+  function toggle(){
+    enabled=!enabled;
+    if(enabled&&!ctx) init();
+    if(ctx) ctx.resume();
+    if(enabled) startPhaseLoops();
+    else stopPhaseLoops();
+    return enabled;
+  }
+
+  function setScale(name){
+    scaleIdx = SCALE_NAMES.indexOf(name);
+    document.querySelectorAll('.scale-btn').forEach(b => {
+      const on = b.dataset.scale === name;
+      b.style.background = on ? 'rgba(68,255,136,0.15)' : 'transparent';
+      b.style.color = on ? '#44ff88' : 'var(--sub)';
+    });
+    if(enabled) startPhaseLoops();
+  }
+
+  function setToneMode(mode){
+    toneMode = mode;
+    document.querySelectorAll('.tone-btn').forEach(b => {
+      const on = b.dataset.tone === mode;
+      b.style.background = on ? 'rgba(255,100,100,0.15)' : 'transparent';
+      b.style.color = on ? 'var(--red)' : 'var(--sub)';
+    });
+    if(enabled) startPhaseLoops();
+  }
+
+  return{spawn,toggle,nextScale,setScale,setToneMode};
+})();
+
+function toggleSound(){
+  const on=audioEngine.toggle();
+  const btn=document.getElementById('soundBtn');
+  btn.textContent=on?'🔊 Sound':'🔇 Sound';
+  btn.style.color=on?'#44ff88':'var(--sub)';
+  btn.style.borderColor=on?'rgba(68,255,136,0.4)':'rgba(255,255,255,0.08)';
+}
+// `/`キーでスケール切り替え
+document.addEventListener('keydown', e => {
+  if(e.key === '/') audioEngine.nextScale();
+});
+
 // p5.js
 let needsClear=false;
 leafletMap.on('movestart zoomstart',()=>{needsClear=true;});
@@ -677,7 +990,6 @@ new p5(function(s){
     constructor(flow){
       this.flow=flow; this.t=s.random(0,.05); this.alive=true;
       this.side=s.random()>.5?1:-1;
-      this.phase=s.random(0, Math.PI*2);   // wobble位相
       const r=maxCount>minCount?(flow.count-minCount)/(maxCount-minCount):1;
       if(isStaying(flow.distance)){
         const wc=paletteColor(weather.palette,r,true);
@@ -700,17 +1012,17 @@ new p5(function(s){
         this.r = cr; this.g = cg; this.b = cb;
       }
       this.speed=isStaying(flow.distance)
-        ? s.random(.003,.007)   // Staying は風の影響小
-        : s.random(.009,.018) * (1 + Math.min(weather.wind/25,1) * 0.7); // Passing は風で加速
+        ? s.random(.003,.007)
+        : s.random(.009,.018) * (1 + Math.min(weather.wind/25,1) * 0.7);
 
-      // 湿度によるくすみ（40%基準、100%で最大40%グレー寄り）
+      // 湿度によるくすみ
       const humidFactor = Math.max(0, (weather.humidity - 40) / 60) * 0.4;
       const gray = (this.r + this.g + this.b) / 3;
       this.r = Math.round(this.r + (gray - this.r) * humidFactor);
       this.g = Math.round(this.g + (gray - this.g) * humidFactor);
       this.b = Math.round(this.b + (gray - this.b) * humidFactor);
-      // ★ HYBRID sz: v1とv2の中間
       this.sz=1.5+r*4.5; this.jit=s.random(-.0004,.0004);
+      audioEngine.spawn(flow);
     }
     pos(){
       const fL=locations[this.flow.from],tL=locations[this.flow.to]; if(!fL||!tL)return null;
@@ -721,9 +1033,7 @@ new p5(function(s){
       const cv=len*.13*this.side;
       const cx=(fp.x+tp.x)/2-(dy/len)*cv, cy=(fp.y+tp.y)/2+(dx/len)*cv;
       const t=this.t;
-      const wobble = Math.sin(this.t * 10 + this.phase) * 2.5;
-      return{x:(1-t)*(1-t)*fp.x+2*(1-t)*t*cx+t*t*tp.x + wobble*(dy/len),
-             y:(1-t)*(1-t)*fp.y+2*(1-t)*t*cy+t*t*tp.y - wobble*(dx/len)};
+      return{x:(1-t)*(1-t)*fp.x+2*(1-t)*t*cx+t*t*tp.x, y:(1-t)*(1-t)*fp.y+2*(1-t)*t*cy+t*t*tp.y};
     }
     update(){this.t+=this.speed+this.jit; if(this.t>=1)this.alive=false;}
     draw(){
@@ -731,12 +1041,11 @@ new p5(function(s){
       const ez=.12, al=this.t<ez?this.t/ez:this.t>1-ez?(1-this.t)/ez:1;
       const a=Math.round(al*255);
       const ctx=s.drawingContext;
-      // ★ HYBRID shadowBlur: 中間値45
-      ctx.shadowBlur=60; ctx.shadowColor=`rgba(${this.r},${this.g},${this.b},${(al*.88).toFixed(2)})`;
+      ctx.shadowBlur=45; ctx.shadowColor=`rgba(${this.r},${this.g},${this.b},${(al*.88).toFixed(2)})`;
       s.noStroke();
-      s.fill(255,255,255,Math.round(a*0.35));        s.circle(p.x,p.y,this.sz);        // 白核を弱く
-      s.fill(this.r,this.g,this.b,Math.round(al*140)); s.circle(p.x,p.y,this.sz*2.8); // 色コア
-      s.fill(this.r,this.g,this.b,Math.round(al*55));  s.circle(p.x,p.y,this.sz*7.5); // 外グローを広げる
+      s.fill(255,255,255,a);                            s.circle(p.x,p.y,this.sz);
+      s.fill(this.r,this.g,this.b,Math.round(al*170));  s.circle(p.x,p.y,this.sz*2.8);
+      s.fill(this.r,this.g,this.b,Math.round(al*40));   s.circle(p.x,p.y,this.sz*6.5);
       ctx.shadowBlur=0;
     }
   }
@@ -806,11 +1115,9 @@ new p5(function(s){
     s.clear();
     flows.forEach(flow=>{
       if(!isVisible(flow))return;
-      // ★ HYBRID spawn: 底上げ付き絶対値ベース
       const spawnRate = 0.015 + Math.min(flow.count / 300, 1) * 0.26;
       if(s.random() < spawnRate) particles.push(new Particle(flow));
     });
-    // ★ HYBRID 上限: バグ修正 + v1水準
     if(particles.length>700)particles.splice(0,particles.length-700);
     particles=particles.filter(p=>{p.update();if(p.alive)p.draw();return p.alive;});
     drawRings(); drawNodeStats(); drawVignette();
@@ -846,14 +1153,14 @@ function initMap(){
     const sz=Math.round(28+ratio*24);
     const br=Math.round(100-ratio*100),bg=Math.round(100-ratio*60),bb=Math.round(120+ratio*135);
     const bc=pr.count===0?'#555566':`rgb(${br},${bg},${bb})`;
-    const lbl=name.replace('棟','').replace('ひとなる図書館','Lib');
+    const lbl=name.replace('棟','').replace('ひとなる図書館','Lib').replace('まちなか','');
     const icon=L.divIcon({
-      html:`<div class="custom-marker" style="width:${sz}px;height:${sz}px;font-size:${Math.max(9,sz*.33)}px;border-color:${bc};box-shadow:0 0 16px ${bc}99,0 0 4px ${bc};">${lbl}</div>`,
+      html:`<div class="custom-marker" style="width:${sz}px;height:${sz}px;font-size:${Math.max(9,sz*.33)}px;border-color:${bc};box-shadow:0 0 16px ${bc}99,0 0 4px ${bc};">${escapeHTML(lbl)}</div>`,
       iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],className:'',
     });
     const spct=(st.out+st.in)>0?Math.round(pr.count/(st.out+st.in+pr.count)*100):0;
     const m=L.marker([pos.lat,pos.lng],{icon,pane:'tooltipPane'}).addTo(leafletMap).bindPopup(`
-      <div class="popup-title">${name}</div>
+      <div class="popup-title">${escapeHTML(name)}</div>
       <div class="popup-row">Visitors detected<span>${pr.count.toLocaleString()} pax</span></div>
       <div class="popup-row">Avg dwell time<span>${pr.avg_dwell} min</span></div>
       <div class="popup-row">Outbound<span>${st.out.toLocaleString()} pax</span></div>
@@ -872,6 +1179,7 @@ function initMap(){
   sorted.forEach((flow,rank)=>{
     const pct=maxCount>minCount?Math.round((flow.count-minCount)/(maxCount-minCount)*100):100;
     const st=isStaying(flow.distance);
+    // ★ サイドバーの色を粒と同じロジックで生成
     const c=getFlowColor(flow);
     const rc=rank===0?'r1':rank===1?'r2':rank===2?'r3':'';
     const item=document.createElement('div');
@@ -880,7 +1188,7 @@ function initMap(){
       <div class="flow-rank ${rc}">${rank+1}</div>
       <div class="flow-swatch" style="background:${c};box-shadow:0 0 5px ${c};"></div>
       <div class="flow-bwrap">
-        <div class="flow-route">${flow.from} → ${flow.to}</div>
+        <div class="flow-route">${escapeHTML(flow.from)} → ${escapeHTML(flow.to)}</div>
         <div class="flow-meta"><span>${flow.distance}m</span><span>${st?'🟠 Staying':'🔵 Passing'}</span></div>
         <div class="flow-bbg"><div class="flow-bar" style="width:0%;background:${c};"></div></div>
       </div>
@@ -898,13 +1206,11 @@ function initMap(){
 }
 
 function updateSidebarColors(mode){
-  const vf=sortedFlows.filter(f=>{const st=isStaying(f.distance);return mode==='all'||(mode==='passing'&&!st)||(mode==='staying'&&st);});
-  const mx=vf.length?Math.max(...vf.map(f=>f.count)):maxCount;
-  const mn=vf.length?Math.min(...vf.map(f=>f.count)):minCount;
   sideItems.forEach((item,i)=>{
     const f=sortedFlows[i]; if(!f)return;
     const st=isStaying(f.distance);
     const vis=mode==='all'||(mode==='passing'&&!st)||(mode==='staying'&&st);
+    // ★ updateSidebarColors も getFlowColor で統一
     const c=getFlowColor(f);
     item.querySelector('.flow-swatch').style.cssText=`background:${c};box-shadow:0 0 5px ${c};`;
     item.querySelector('.flow-bar').style.background=c;
@@ -926,11 +1232,15 @@ leafletMap.whenReady(async()=>{
   const jst=new Date(Date.now()+9*60*60*1000);
   const d=jst.toISOString().slice(0,10);
   $('datePicker').value=d;
+  // ★ fetchWeather を await して色が確定してから initMap
   await fetchWeather(d);
   await fetchData(d);
   initMap();
   $('reloadBtn').addEventListener('click',async()=>{
-    const rd=$('datePicker').value; await fetchWeather(rd); await fetchData(rd); initMap();
+    const rd=$('datePicker').value;
+    await fetchWeather(rd);
+    await fetchData(rd);
+    initMap();
   });
 });
 
@@ -964,8 +1274,8 @@ function startPlay(){
   isPlaying=true;
   document.getElementById('playBtn').textContent='⏸';
   let h = currentHour===-1 ? 0 : currentHour;
-  const hours = [...new Set(allFlows.map(f=>f.hour))].sort((a,b)=>a-b);
-  if(hours.length===0){stopPlay();return;}
+  const hours = Array.from({length:24},(_,i)=>i);
+  if(allFlows.length===0){stopPlay();return;}
 
   function tick(){
     if(!isPlaying) return;
@@ -977,9 +1287,13 @@ function startPlay(){
     document.querySelectorAll('.time-mode-btn').forEach(b=>b.classList.remove('active'));
     document.getElementById('timeModeHour').classList.add('active');
     const next = hours[idx+1];
-    if(next===undefined){ stopPlay(); return; }
+    if(next===undefined){
+      if(loopPlay){ h = hours[0]; playTimer = setTimeout(tick, 1000); return; }
+      stopPlay(); return;
+    }
+    const hasData = allFlows.some(f=>f.hour===h);
     h = next;
-    playTimer = setTimeout(tick, 3000);
+    playTimer = setTimeout(tick, hasData ? 90000 : 30000);
   }
   tick();
 }
@@ -988,6 +1302,33 @@ function stopPlay(){
   isPlaying=false;
   document.getElementById('playBtn').textContent='▶';
   if(playTimer){ clearTimeout(playTimer); playTimer=null; }
+  document.querySelectorAll('.time-mode-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('timeModeAll').classList.add('active');
+  document.getElementById('hourSlider').value=-1;
+  applyHourFilter(-1);
+  initMap();
+}
+
+function toggleLoop(){
+  loopPlay=!loopPlay;
+  const label = loopPlay ? '⟳ Loop: ON' : '⟳ Loop';
+  const btn = document.getElementById('loopBtn');
+  const btnEx = document.getElementById('loopBtnEx');
+  if(btn){ btn.textContent=label; btn.style.color=loopPlay?'var(--red)':'var(--sub)'; btn.style.borderColor=loopPlay?'rgba(255,100,100,0.5)':'rgba(255,255,255,0.08)'; }
+  if(btnEx){ btnEx.textContent=loopPlay?'⟳ Loop: ON':'⟳ Loop: OFF'; btnEx.style.color=loopPlay?'var(--red)':'var(--sub)'; }
+}
+
+function enterExhibition(){
+  document.body.classList.add('exhibition');
+  setTimeout(()=>{
+    if(window.p5sketch) window.p5sketch.windowResized();
+    if(typeof leafletMap !== 'undefined') leafletMap.invalidateSize();
+  }, 50);
+  if(!isPlaying) startPlay();
+}
+
+function exitExhibition(){
+  document.body.classList.remove('exhibition');
 }
 
 function toggleDrawer(){
@@ -1000,6 +1341,5 @@ document.querySelector('.sb-head').addEventListener('click',function(){
   if(window.innerWidth<=768) toggleDrawer();
 });
 </script>
-
 </body>
 </html>
